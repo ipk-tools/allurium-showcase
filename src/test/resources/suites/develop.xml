@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="DEVELOPMENT">
+
+    <test name="DEVELOP">
+        <classes>
+            <class name="allurium_style.tests.ITExampleAlluriumTest">
+                <methods>
+                    <include name="fillTheForm"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
