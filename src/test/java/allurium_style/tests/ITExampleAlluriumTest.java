@@ -216,7 +216,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         dynamicEmployeesListPage.employees().assertSize(3);
         dynamicEmployeesListPage.btnAddEmployee().click();
         dynamicEmployeesListPage.employees().assertSizeGreaterThan(3);
-        dynamicEmployeesListPage.employees().should(CollectionCondition.sizeGreaterThan(5));
+        dynamicEmployeesListPage.employees().should(CollectionCondition.sizeGreaterThanOrEqual(4));
         dynamicEmployeesListPage.btnAddEmployee().click();
         dynamicEmployeesListPage.employees().assertSize(5);
         dynamicEmployeesListPage.employees().get("john.smith").btnDelete().click();
@@ -341,7 +341,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
     @Test
     @DisplayName("Browser steps showcase")
     public void browserSteps() {
-        UiSteps.openBrowser("https://www.go ogle.com/");
+        UiSteps.openBrowser("https://www.google.com/");
         // manage cookies
         BrowserSteps.addCookie("session", "9999999");
         BrowserSteps.addCookie("user", "444888");

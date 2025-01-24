@@ -2,7 +2,6 @@
 plugins {
     id "java-library"
     id "io.qameta.allure" version "2.9.6"
-//    id 'io.freefair.aspectj' version '6.6.1'
 }
 
 java {
