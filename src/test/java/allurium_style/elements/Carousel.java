@@ -1,8 +1,8 @@
 package allurium_style.elements;
 
-import dm.tools.UiSteps;
-import dm.tools.annotations.Widget;
-import dm.tools.carousels.AbstractCarousel;
+import allurium.UiSteps;
+import allurium.annotations.Widget;
+import allurium.carousels.AbstractCarousel;
 
 @Widget
 public class Carousel extends AbstractCarousel {

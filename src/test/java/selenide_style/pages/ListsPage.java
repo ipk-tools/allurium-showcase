@@ -1,9 +1,9 @@
 package selenide_style.pages;
 
-import dm.tools.annotations.Name;
-import dm.tools.annotations.PageObject;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.ListItem;
+import allurium.annotations.Name;
+import allurium.annotations.PageObject;
+import allurium.lists.ListWC;
+import allurium.primitives.ListItem;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.openqa.selenium.By;

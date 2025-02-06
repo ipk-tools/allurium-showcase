@@ -1,11 +1,11 @@
 package allurium_style.pages;
 
-import dm.tools.AbstractWidget;
-import dm.tools.annotations.*;
-import dm.tools.inputs.DropdownSelect;
-import dm.tools.inputs.TextField;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.*;
+import allurium.AbstractWidget;
+import allurium.annotations.*;
+import allurium.inputs.DropdownSelect;
+import allurium.inputs.TextField;
+import allurium.lists.ListWC;
+import allurium.primitives.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 

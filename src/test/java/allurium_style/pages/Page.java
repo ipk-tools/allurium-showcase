@@ -1,14 +1,14 @@
 package allurium_style.pages;
 
-import dm.tools.annotations.ListLocator;
-import dm.tools.annotations.Name;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.Button;
-import dm.tools.primitives.Link;
+import allurium.annotations.ListLocator;
+import allurium.annotations.Name;
+import allurium.lists.ListWC;
+import allurium.primitives.Button;
+import allurium.primitives.Link;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import static dm.tools.primitives.Button.$button;
+import static allurium.primitives.Button.$button;
 
 @Getter
 @Accessors(fluent = true)

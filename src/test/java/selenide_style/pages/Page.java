@@ -2,7 +2,7 @@ package selenide_style.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import dm.tools.inputs.Select;
+import allurium.inputs.Select;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 

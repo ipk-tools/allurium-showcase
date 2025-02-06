@@ -1,13 +1,13 @@
 package allurium_style.widgets;
 
-import dm.tools.AbstractWidget;
-import dm.tools.annotations.ListLocatorChain;
-import dm.tools.annotations.LocatorChain;
-import dm.tools.annotations.Name;
-import dm.tools.annotations.Widget;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.Icon;
-import dm.tools.primitives.Link;
+import allurium.AbstractWidget;
+import allurium.annotations.ListLocatorChain;
+import allurium.annotations.LocatorChain;
+import allurium.annotations.Name;
+import allurium.annotations.Widget;
+import allurium.lists.ListWC;
+import allurium.primitives.Icon;
+import allurium.primitives.Link;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 

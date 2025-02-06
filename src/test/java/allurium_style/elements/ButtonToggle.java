@@ -1,7 +1,7 @@
 package allurium_style.elements;
 
 import com.codeborne.selenide.Condition;
-import dm.tools.switchers.AbstractSwitcher;
+import allurium.switchers.AbstractSwitcher;
 
 public class ButtonToggle extends AbstractSwitcher {
 

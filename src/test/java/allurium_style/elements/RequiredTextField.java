@@ -1,6 +1,6 @@
 package allurium_style.elements;
 
-import dm.tools.inputs.TextField;
+import allurium.inputs.TextField;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.assertj.core.api.Assertions;

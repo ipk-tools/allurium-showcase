@@ -2,7 +2,7 @@ package selenide_style.widgets;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import dm.tools.AbstractWidget;
+import allurium.AbstractWidget;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 

@@ -1,16 +1,16 @@
 package allurium_style.widgets;
 
-import dm.tools.AbstractWidget;
-import dm.tools.annotations.ListLocator;
-import dm.tools.annotations.Locator;
-import dm.tools.annotations.Name;
-import dm.tools.annotations.Widget;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.MenuItem;
+import allurium.annotations.Name;
+import allurium.AbstractWidget;
+import allurium.annotations.ListLocator;
+import allurium.annotations.Locator;
+import allurium.annotations.Widget;
+import allurium.lists.ListWC;
+import allurium.primitives.MenuItem;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import static dm.tools.primitives.MenuItem._$menuItem;
+import static allurium.primitives.MenuItem._$menuItem;
 
 @Widget
 @Getter

@@ -18,7 +18,7 @@ configurations {
 
 compileJava.options.encoding = 'utf-8'
 
-group = "dm.tools"
+group = "io.github.ipk-tools"
 version = "6.17.2"
 
 repositories {
@@ -72,7 +72,8 @@ dependencies {
     }
     testImplementation("io.qameta.allure:allure-junit5:2.24.0")
 
-    implementation('dm.tools:allurium:0.9')
+    //implementation('ipk-tools:allurium:0.9') // for local development
+    implementation("io.github.ipk-tools:allurium:0.9")
 }
 
 reporting {

@@ -1,7 +1,7 @@
 package selenide_style.pages;
 
 import com.codeborne.selenide.SelenideElement;
-import dm.tools.annotations.PageObject;
+import allurium.annotations.PageObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import selenide_style.widgets.TopBar;

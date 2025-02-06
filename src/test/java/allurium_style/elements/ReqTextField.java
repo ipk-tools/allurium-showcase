@@ -1,6 +1,6 @@
 package allurium_style.elements;
 
-import dm.tools.inputs.AbstractRequiredTextField;
+import allurium.inputs.AbstractRequiredTextField;
 import org.assertj.core.api.Assertions;
 
 public class ReqTextField extends AbstractRequiredTextField {

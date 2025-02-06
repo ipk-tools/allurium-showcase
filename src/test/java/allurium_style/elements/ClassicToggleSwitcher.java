@@ -1,6 +1,6 @@
 package allurium_style.elements;
 
-import dm.tools.switchers.AbstractSwitcher;
+import allurium.switchers.AbstractSwitcher;
 
 public class ClassicToggleSwitcher extends AbstractSwitcher {
 

@@ -1,10 +1,10 @@
 package allurium_style.pages;
 
-import dm.tools.annotations.Locator;
-import dm.tools.annotations.Name;
-import dm.tools.annotations.PageObject;
-import dm.tools.inputs.*;
-import dm.tools.primitives.Button;
+import allurium.annotations.Locator;
+import allurium.annotations.Name;
+import allurium.annotations.PageObject;
+import allurium.inputs.*;
+import allurium.primitives.Button;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import allurium_style.widgets.LeftSideCategoriesMenu;

@@ -3,7 +3,7 @@ package allurium_style.tests;
 import allurium_style.pages.*;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import dm.tools.UiSteps;
+import allurium.UiSteps;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterAll;

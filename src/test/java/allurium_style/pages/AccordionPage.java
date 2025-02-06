@@ -1,10 +1,10 @@
 package allurium_style.pages;
 
 import com.codeborne.selenide.SelenideElement;
-import dm.tools.AbstractWidget;
-import dm.tools.annotations.*;
-import dm.tools.lists.ListWC;
-import dm.tools.primitives.*;
+import allurium.AbstractWidget;
+import allurium.annotations.*;
+import allurium.lists.ListWC;
+import allurium.primitives.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import selenide_style.pages.Page;

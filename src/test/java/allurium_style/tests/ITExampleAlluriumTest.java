@@ -3,10 +3,10 @@ package allurium_style.tests;
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import dm.tools.AlluriumConfig;
-import dm.tools.UiSteps;
-import dm.tools.browser.BrowserActions;
-import dm.tools.browser.BrowserSteps;
+import allurium.AlluriumConfig;
+import allurium.UiSteps;
+import allurium.browser.BrowserActions;
+import allurium.browser.BrowserSteps;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
@@ -233,7 +233,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
     }
 
     @Test
-    @DisplayName("Showcase ListWC interaction methods")
+    @DisplayName("Showcase ListWC interaction methods, fails")
     public void dynamicListActionsFailedScenarioShowcase() {
         UiSteps.openBrowser(dynamicTablePageUrl);
         dynamicEmployeesListPage.employees().assertSize(3);
