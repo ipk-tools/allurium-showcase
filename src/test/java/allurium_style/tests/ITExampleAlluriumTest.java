@@ -1,5 +1,6 @@
 package allurium_style.tests;
 
+import allurium_style.pages.AccordionPage;
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
@@ -389,8 +390,8 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
     @Test
     public void listFiltering() {
         UiSteps.openBrowser(accordionPageUrl);
-//        accordionPage.accordionSections().get("Chapter 2").title().click();
-        accordionPage.accordionSections().filter(Condition.text("Chapter 2")).get(0).title().click();
+        AccordionPage.AccordionSection accordionSection = accordionPage.accordionSections().filter(Condition.text("Chapter 2")).get(0);
+        accordionSection.title().click();
     }
 
     @Test
