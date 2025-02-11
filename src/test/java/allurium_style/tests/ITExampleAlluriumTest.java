@@ -116,7 +116,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         simpleListsPage.listBirdNameButtons().get("Hummingbird").click();
         simpleListsPage.listBirdNameButtons().get("Woodpecker").click();
         simpleListsPage.listBirdNameButtons().get("Crow").click();
-        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();
+        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).first().click();
         simpleListsPage.listBirdNameButtons().assertHasItemsWithText("Eagle");
     }
 
@@ -383,6 +383,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
     }
 
     @Test
+    @DisplayName("Filtration examples")
     public void listFiltering() {
         UiSteps.openBrowser(accordionPageUrl);
         AccordionPage.AccordionSection accordionSection = accordionPage.accordionSections().filter(Condition.text("Chapter 2")).get(0);
@@ -390,8 +391,11 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         accordionPage.accordionSections().filter(Condition.visible).assertSize(5);
         accordionPage.accordionSections().filter(Condition.cssClass("card")).assertSize(5);
         accordionPage.accordionSections().filter(Condition.name("some")).assertSize(0);
-        UiSteps.openBrowser(listsPageUrl);
-        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();
+        accordionPage.accordionSections()
+                .filter(Condition.visible)
+                .filter(Condition.cssClass("card"))
+                .filter(Condition.text("Chapter 2"))
+                .assertSize(1);
     }
 
     @Test
