@@ -116,7 +116,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         simpleListsPage.listBirdNameButtons().get("Hummingbird").click();
         simpleListsPage.listBirdNameButtons().get("Woodpecker").click();
         simpleListsPage.listBirdNameButtons().get("Crow").click();
-//        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();
+        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();
         simpleListsPage.listBirdNameButtons().assertHasItemsWithText("Eagle");
     }
 
@@ -241,13 +241,8 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         dynamicEmployeesListPage.btnAddEmployee().click();
         dynamicEmployeesListPage.employees().assertSizeGreaterThan(3);
         dynamicEmployeesListPage.employees().should(CollectionCondition.sizeGreaterThan(5));
-    }
-
-    @Test
-    @DisplayName("Showcase ListWC interaction methods")
-    public void dynamicListTableFiltering() {
-        UiSteps.openBrowser(dynamicTablePageUrl);
-
+        dynamicEmployeesListPage.employees()
+                .should(CollectionCondition.containExactTextsCaseSensitive("jane.doe@example.com"));
     }
 
     @Test
@@ -392,6 +387,11 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         UiSteps.openBrowser(accordionPageUrl);
         AccordionPage.AccordionSection accordionSection = accordionPage.accordionSections().filter(Condition.text("Chapter 2")).get(0);
         accordionSection.title().click();
+        accordionPage.accordionSections().filter(Condition.visible).assertSize(5);
+        accordionPage.accordionSections().filter(Condition.cssClass("card")).assertSize(5);
+        accordionPage.accordionSections().filter(Condition.name("some")).assertSize(0);
+        UiSteps.openBrowser(listsPageUrl);
+        simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();
     }
 
     @Test

@@ -30,7 +30,7 @@ public class HomePage {
     @Getter
     @Accessors(fluent = true)
     public static class NavBar extends AbstractWidget {
-        @Name("Images")
+        @Name("Photos")
         @Locator(css = ".navbar-nav .nav-item:nth-child(1)")
         protected Link linkPhotos;
 
