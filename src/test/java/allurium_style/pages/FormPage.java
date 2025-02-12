@@ -45,6 +45,10 @@ public class FormPage extends Page {
     @Locator(css = "#tel")
     protected TextField fieldTelephone;
 
+    @Name("Annual income increment")
+    @Locator(css = "#increment-button")
+    protected Button btnAnnualIncomeIncrement;
+
     @Name("Avatar")
     @Locator(css = "#file")
     protected UploadField uploadAvatar;
