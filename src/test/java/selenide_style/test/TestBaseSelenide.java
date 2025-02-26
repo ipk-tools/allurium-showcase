@@ -1,14 +1,15 @@
 package selenide_style.test;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import allurium.UiSteps;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import selenide_style.pages.*;
+import utils.CustomDriverProvider;
 
 import java.net.URL;
 
@@ -31,16 +32,26 @@ public class TestBaseSelenide {
                 .screenshots(true)
                 .savePageSource(false));
 
-        Configuration.browser = "chrome";
         Configuration.pageLoadTimeout = 30000;
         Configuration.timeout = 15000;
-        WebDriverManager.chromedriver().setup();
-        UiSteps.openBrowser();
-        WebDriverRunner.getWebDriver().manage().window().maximize();
-    }
+        boolean remote = false;
 
-    protected void open(String htmlName) {
-        UiSteps.loadPage(resourceUrl + htmlName);
+        if (remote) {
+            System.setProperty("browserName", "chrome");
+            System.setProperty("browserVersion", "latest");
+            System.setProperty("remoteUrl", "http://192.168.19.109:8080/wd/hub");
+            System.setProperty("width", "1920");
+            System.setProperty("height", "1080");
+            System.setProperty("headless", "false");
+            System.setProperty("selenoid", "true");
+            Configuration.browser = CustomDriverProvider.class.getName();
+        } else {
+            Configuration.browser = "chrome";
+            WebDriverManager.chromedriver().setup();
+            Configuration.browserSize = "1920x1080";
+        }
+        Selenide.open();
+        WebDriverRunner.getWebDriver().manage().window().maximize();
     }
 
     @AfterAll

@@ -2,13 +2,12 @@ package allurium_style.tests;
 
 import allurium_style.pages.*;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
-import allurium.UiSteps;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.testng.annotations.*;
+import utils.CustomDriverProvider;
 
 public class TestBaseAllurium {
 
@@ -22,15 +21,29 @@ public class TestBaseAllurium {
     protected ListLocatorPage listLocatorPage = new ListLocatorPage();
     protected IframePage iframePage = new IframePage();
     protected CarouselPage carouselPage = new CarouselPage();
+    protected SwitcherPage switcherPage = new SwitcherPage();
 
 
     @BeforeAll
     protected static void beforeAll() {
-        Configuration.browser = "chrome";
         Configuration.pageLoadTimeout = 30000;
         Configuration.timeout = 15000;
-        WebDriverManager.chromedriver().setup();
-        UiSteps.openBrowser();
+        boolean remote = false;
+
+        if (remote) {
+            System.setProperty("browserName", "chrome");
+            System.setProperty("browserVersion", "latest");
+            System.setProperty("remoteUrl", "http://192.168.19.109:8080/wd/hub");
+            System.setProperty("width", "1920");
+            System.setProperty("height", "1080");
+            System.setProperty("headless", "false");
+            System.setProperty("selenoid", "true");
+            Configuration.browser = CustomDriverProvider.class.getName();
+        } else {
+            Configuration.browser = "chrome";
+            WebDriverManager.chromedriver().setup();
+        }
+        Selenide.open();
         WebDriverRunner.getWebDriver().manage().window().maximize();
     }
 
@@ -38,32 +51,5 @@ public class TestBaseAllurium {
     protected static void afterAll() {
         WebDriverRunner.closeWebDriver();
     }
-
-
-
-    @BeforeSuite
-    protected void beforeTest() {
-        Configuration.browser = "chrome";
-        Configuration.pageLoadTimeout = 30000;
-        Configuration.timeout = 15000;
-        WebDriverManager.chromedriver().setup();
-        UiSteps.openBrowser();
-        WebDriverRunner.getWebDriver().manage().window().maximize();
-    }
-
-    @BeforeMethod
-    @Step("Test case preparation")
-    protected void beforeMethod() {}
-
-    @AfterMethod
-    @Step("Finishing test case")
-    protected void afterMethod() {}
-
-    @BeforeSuite
-    protected void afterTest() {
-        WebDriverRunner.closeWebDriver();
-    }
-
-
 
 }

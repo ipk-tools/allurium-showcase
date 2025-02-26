@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import utils.Pms;
 
 import java.io.File;
 import java.net.URL;
@@ -18,12 +19,18 @@ import static com.codeborne.selenide.Selenide.$;
 @Epic("Selenide style")
 public class ITExampleSelenideTest extends TestBaseSelenide {
 
+    // local pages url
     String formPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/form.html";
     String listsPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/lists.html";
     String accordionPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/accordion.html";
-    String listLocatorPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/list_locator_chain.html";
+//    String listsPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/list_locator_chain.html";
     String tablePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/table.html";
     String iframePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/iframe.html";
+
+    // remote pages url
+//    String formPageUrl = "file:///home/selenium/Downloads/pages/form.html";
+//    String listsPageUrl = "file:///home/selenium/Downloads/pages/lists.html";
+//    String tablePageUrl = "file:///home/selenium/Downloads/pages/table.html";
 
     @Test
     @Feature("Multilevel top menu")
@@ -71,15 +78,103 @@ public class ITExampleSelenideTest extends TestBaseSelenide {
         formPage.fieldDate().sendKeys("11.11.2011");
         formPage.fieldTelephone().sendKeys("199887688");
         formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()));
+        formPage.radioBtnMale().scrollIntoView(true);
         formPage.radioBtnMale().click();
         formPage.radioBtnMale().shouldBe(Condition.enabled);
         formPage.radioBtnFemale().shouldBe(Condition.disabled);
+        formPage.ckbMorning().scrollIntoView(true);
         formPage.ckbMorning().click();
         formPage.ckbMorning().shouldBe(Condition.checked);
         formPage.ckbEvening().shouldNotBe(Condition.checked);
         formPage.ddExperience().selectOption("2 years");
         formPage.selectWorkingDays().selectOption("Monday", "Friday");
-        formPage.btnSubmit().click();
+    }
+
+    @Test
+    @Feature("Form")
+    @DisplayName("Filling the example form")
+    protected void fillTheFormWithProfiling() {
+        URL imageUrl = this.getClass().getClassLoader().getResource("img/testicon.png");
+        Selenide.open(formPageUrl);
+        long startTime = System.nanoTime();
+
+        Pms.measureExecutionTime("Open Browser", () -> Selenide.open(formPageUrl));
+
+        Pms.measureExecutionTime("Login Field Visibility Check", () ->
+                formPage.fieldLogin().shouldBe(Condition.visible)
+        );
+
+        Pms.measureExecutionTime("Enter Login", () ->
+                formPage.fieldLogin().sendKeys("John")
+        );
+
+        Pms.measureExecutionTime("Login Field CSS Class Check", () ->
+                formPage.fieldLogin().shouldHave(Condition.cssClass("form-control"))
+        );
+
+        Pms.measureExecutionTime("Login Field Value Check", () ->
+                formPage.fieldLogin().shouldHave(Condition.value("John"))
+        );
+
+        Pms.measureExecutionTime("Enter Email", () ->
+                formPage.fieldEmail().sendKeys("john.doe@gmail.com")
+        );
+
+        Pms.measureExecutionTime("Email Value Check", () ->
+                formPage.fieldEmail().shouldHave(Condition.value("john.doe@gmail.com"))
+        );
+
+        Pms.measureExecutionTime("Enter Password", () ->
+                formPage.fieldPassword().sendKeys("Password12345!")
+        );
+
+        Pms.measureExecutionTime("Enter Rank", () ->
+                formPage.fieldRank().sendKeys("10")
+        );
+
+        Pms.measureExecutionTime("Enter Date", () ->
+                formPage.fieldDate().sendKeys("11.11.2011")
+        );
+
+        Pms.measureExecutionTime("Enter Telephone", () ->
+                formPage.fieldTelephone().sendKeys("199887688")
+        );
+
+        Pms.measureExecutionTime("Upload Avatar", () ->
+                formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()))
+        );
+
+        Pms.measureExecutionTime("Scroll & Select Male Radio Button", () -> {
+            formPage.radioBtnMale().scrollIntoView(true);
+            formPage.radioBtnMale().click();
+        });
+
+        Pms.measureExecutionTime("Male Radio Button -  assert enabled", () -> {
+            formPage.radioBtnMale().shouldBe(Condition.enabled);
+        });
+
+        Pms.measureExecutionTime("Female Radio Button -  assert disabled", () -> {
+            formPage.radioBtnFemale().shouldBe(Condition.disabled);
+        });
+
+        Pms.measureExecutionTime("Scroll & Check Morning Checkbox", () -> {
+            formPage.ckbMorning().scrollIntoView(true);
+            formPage.ckbMorning().click();
+            formPage.ckbMorning().shouldBe(Condition.checked);
+            formPage.ckbEvening().shouldNotBe(Condition.checked);
+        });
+
+        Pms.measureExecutionTime("Select Experience", () ->
+                formPage.ddExperience().selectOption("2 years")
+        );
+
+        Pms.measureExecutionTime("Select Working Days", () ->
+                formPage.selectWorkingDays().selectOption("Monday", "Friday")
+        );
+
+        long endTime = System.nanoTime();
+        long durationInMillis = (endTime - startTime) / 1_000_000;
+        System.out.println("Form filling execution time: " + durationInMillis + " ms");
     }
 
     @Test
@@ -211,6 +306,51 @@ public class ITExampleSelenideTest extends TestBaseSelenide {
         webTablesPage.assertDepartmentOfEmployee("Howard", "Development");
         webTablesPage.hireBySurname("Spencer");
     }
+
+    @Test
+    @DisplayName("Using ListWC to handle a table with profiling")
+    public void tableExampleWithProfiling() {
+        long startTime = System.nanoTime();
+
+        Pms.measureExecutionTime("Open Browser", () -> Selenide.open(tablePageUrl));
+
+        Pms.measureExecutionTime("Assert employee Vega has name Cierra", () ->
+                webTablesPage.assertEmployeeWithSurnameHasCertainName("Vega", "Cierra")
+        );
+
+        Pms.measureExecutionTime("Assert Cantrell email is alden@example.com", () ->
+                webTablesPage.assertEmailOfEmployeeWithCertainSurname("Cantrell", "alden@example.com")
+        );
+
+        Pms.measureExecutionTime("Hire employee Gentry", () ->
+                webTablesPage.hireBySurname("Gentry")
+        );
+
+        Pms.measureExecutionTime("Assert employee Hogg has email containing hogg@", () ->
+                webTablesPage.assertEmployeeHasEmailWithText("Hogg", "hogg@")
+        );
+
+        Pms.measureExecutionTime("Hire employee Hogg", () ->
+                webTablesPage.hireBySurname("Hogg")
+        );
+
+        Pms.measureExecutionTime("Fire employee Watkins", () ->
+                webTablesPage.fireBySurname("Watkins")
+        );
+
+        Pms.measureExecutionTime("Assert Howard department is Development", () ->
+                webTablesPage.assertDepartmentOfEmployee("Howard", "Development")
+        );
+
+        Pms.measureExecutionTime("Hire employee Spencer", () ->
+                webTablesPage.hireBySurname("Spencer")
+        );
+
+        long endTime = System.nanoTime();
+        long durationInMillis = (endTime - startTime) / 1_000_000;
+        System.out.println("Form filling execution time: " + durationInMillis + " ms");
+    }
+
 
     @Test
     @DisplayName("Working with elements in an Iframe")
