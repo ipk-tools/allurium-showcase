@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Пример теста с ошибкой</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/accordionFailedTest/accordionFailedTest.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Пример теста с ошибкой</h1>
+      <p class="lead">Пример 5</p>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+    
+      <p>Возьмём предыдущий пример списка виджетов</p>
+      <hr/>
+      <iframe width="80%" height="650" src="./../../../examples_pages/accordion.html"></iframe>
+      <hr/>
+      <p>но слегка добавим в ожидаемый результат текста пятой главы заведомо неверное значение.</p>
+      
+      <p>Запустим пример на Selenide и посмотрим отчёт:</p>
+      <div class="text-center my-3">
+        <img src="img/accordionFailedTest_selenide.jpg" alt="Отчёт Selenide: Accordion Failed">
+      </div>
+      
+      <p>И запустим с Allurium и сравним отчёты:</p>
+      <div class="text-center my-3">
+        <img src="img/accordionFailedTest_allurium.jpg" alt="Отчёт Allurium: Accordion Failed" class="img-fluid">
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../accordionPassedTest/accordionPassedTest.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Список виджетов, поиск и использование
+        </a>
+        <a href="./../sectionsWithListsOfElements/sectionsWithListsOfElements.html" class="btn btn-outline-secondary">
+          Строим списки виджетов, со списками внутри виджетов &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Пример заполнения простой формы</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/fillTheForm/fillTheForm.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Заполнение простой формы</h1>
+      <p class="lead">Пример 1</p>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      
+      <p>Начинать всегда проще с простых примеров.</p>
+      <p>Давайте для начала рассмотрим один из простейших сценариев, такой как заполнение примитивной формы, с разными типами полей ввода. Код страницы лежит в проекте с примерами. Форма выглядит так:</p>
+
+      <hr/>
+      <iframe width="100%" height="800" src="./../../../examples_pages/form.html"></iframe>
+      <hr/>
+      
+      <!-- <div class="text-center my-3">
+        <img src="img/fillTheForm.jpg" alt="Заполнение формы">
+      </div> -->
+      
+      <h3 class="section-title">Сначала рассмотрим один из вариантов, как это могло бы быть сделано на Selenide</h3>
+      <p>Будем использовать JUnit, т.к. он максимально прост, а сложный функционал здесь не требуется.</p>
+      <p><strong>1. Нужно создать Page Object и описать имеющиеся на странице элементы.</strong></p>
+      
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class FormPage extends Page {
+
+    protected TopBar topBar = new TopBar();
+    protected SelenideElement fieldLogin = $("#login").as("Textfield Login");
+    protected SelenideElement fieldEmail = $("#email").as("Textfield Email");
+    protected SelenideElement fieldPassword = $("#password").as("Textfield Password");
+    protected SelenideElement fieldRank = $("#rank").as("Textfield rank");
+    protected SelenideElement fieldDate = $x("//input[@id='date']").as("Textfield Date");
+    protected SelenideElement fieldTelephone = $("#tel").as("Textfield Telephone");
+    protected SelenideElement uploadAvatar = $("#file").as("File input Avatar");
+    protected SelenideElement radioBtnMale = $("#male").as("Radiobutton Gender Male");
+    protected SelenideElement radioBtnFemale = $("#female").as("Radiobutton Gender Female");
+    protected SelenideElement ckbMorning = $("#checkbox1").as("Checkbox Preferable time - Morning");
+    protected SelenideElement ckbEvening = $("#checkbox2").as("Checkbox Preferable time - Evening");
+    protected SelenideElement ddExperience = $("#experience").as("Dropdown list Experience");
+    protected SelenideElement selectWorkingDays = $("#multiple-select").as("Select Working Days");
+    protected SelenideElement btnReset = $(".btn-secondary").as("Button Reset");
+    protected SelenideElement btnSubmit = $(".btn-primary").as("Button Submit");
+}
+</code></pre>
+
+      <p><strong>2. Написать сам тестовый сценарий в соответствующем классе.</strong></p>
+      
+      <pre><code class="language-java">@Epic("Selenide style")
+public class ITExampleSelenideTest extends TestBaseSelenide {
+
+    @Test
+    @Feature("Form")
+    @DisplayName("Filling the example form")
+    protected void fillTheForm() {
+        URL imageUrl = this.getClass().getClassLoader().getResource("img/testicon.png");
+        Selenide.open(formPageUrl);
+        formPage.fieldLogin().shouldBe(Condition.visible);
+        formPage.fieldLogin().sendKeys("John");
+        formPage.fieldLogin().shouldHave(Condition.cssClass("form-control"));
+        formPage.fieldLogin().shouldHave(Condition.value("John"));
+        formPage.fieldEmail().sendKeys("john.doe@gmail.com");
+        formPage.fieldEmail().shouldHave(Condition.value("john.doe@gmail.com"));
+        formPage.fieldPassword().sendKeys("Password12345!");
+        formPage.fieldRank().sendKeys("10");
+        formPage.fieldDate().sendKeys("11.11.2011");
+        formPage.fieldTelephone().sendKeys("199887688");
+        formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()));
+        formPage.radioBtnMale().click();
+        formPage.radioBtnMale().shouldBe(Condition.enabled);
+        formPage.radioBtnFemale().shouldBe(Condition.disabled);
+        formPage.ckbMorning().click();
+        formPage.ckbMorning().shouldBe(Condition.checked);
+        formPage.ckbEvening().shouldNotBe(Condition.checked);
+        formPage.ddExperience().selectOption("2 years");
+        formPage.selectWorkingDays().selectOption("Monday", "Friday");
+        formPage.btnSubmit().click();
+    }
+}
+</code></pre>
+      
+      <p>Скрипт прост и понятен. Мы обозначили имена полей и заполнили их. Казалось бы, нечего улучшать. Давайте теперь сгенерируем отчёт Allure и посмотрим:</p>
+      
+      <div class="text-center my-3">
+        <img src="img/fillTheForm_selenide.jpg" alt="Отчёт Selenide" class="img-fluid">
+      </div>
+      
+      <p>Из этого отчёта можно понять, что происходит, но даже в таком экстримально простом кейсе для того, кто его не писал, многое режет глаз. А уж для не кодеров и тех, кто привык к BDD, тем более.</p>
+      <p>К тому же, что делать, если, как в одной из компаний, отчёт хотят видеть на другом языке? С этим есть проблема.</p>
+      <p>Испытав все подходы, я больше всего не люблю писать тесты с использованием BDD, где на каждый простейший клик приходится создавать несколько уровней классов, или, не дай бог, работать с Serenity. Хотя BDD-отчёты мне в принципе нравились, я думал, как сделать так, чтобы получать удобные и читаемые репорты, схожие с BDD, но без самой архитектуры BDD. Либо найти компромиссное решение. Плюс к этому должна быть возможность составлять отчёт автоматически на любом языке, а не только на английском.</p>
+      <p>Я хотел автоматически получать примерно такой отчёт:</p>
+      
+      <div class="text-center my-3">
+        <img src="img/fillTheForm_allurium.jpg" alt="Отчёт Allurium" class="img-fluid">
+      </div>
+      
+      <p>В этом отчёте обозначены все типы элементов, а человекопонятным языком описывается совершаемое действие. Видны все применённые ассерты, но отсутствует лишний мусор. Такой отчёт я получаю автоматически, если тест составлен похожим образом:</p>
+      
+      <pre><code class="language-java">@Epic("Selenide style")
+public class ITExampleSelenideTest extends TestBaseSelenide {
+    @Test
+    @Feature("Form")
+    @DisplayName("Filling the example form")
+    public void fillTheForm() {
+        URL imageUrl = this.getClass().getClassLoader().getResource("img/testicon.png");
+        UiSteps.openBrowser(formPageUrl);
+        formPage.fieldLogin().assertVisible();
+        formPage.fieldLogin().write("John");
+        formPage.fieldLogin().assertHasCssClass("form-control");
+        formPage.fieldLogin().assertCurrentValue("John");
+        formPage.fieldEmail().write("john.doe@gmail.com");
+        formPage.fieldEmail().assertCurrentValue("john.doe@gmail.com");
+        formPage.fieldPassword().write("Password12345!");
+        formPage.fieldRank().write("10");
+        formPage.fieldDate().clearAndWrite("11.11.2011");
+        formPage.fieldTelephone().write("199887688");
+        formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()));
+        formPage.radioBtnMale().click();
+        formPage.radioBtnMale().assertEnabled();
+        formPage.radioBtnFemale().assertDisabled();
+        formPage.ckbMorning().check();
+        formPage.ckbMorning().assertChecked();
+        formPage.ckbEvening().assertUnchecked();
+        formPage.ddExperience().select("2 years");
+        formPage.selectWorkingDays().select("Monday");
+        formPage.selectWorkingDays().select("Friday");
+        formPage.btnSubmit().click();
+    }
+}
+</code></pre>
+      
+      <p>В этом примере тест не выглядит короче, но, на мой взгляд, значительно читабельнее. Ассерты вызываются прямо на элементе, а фреймворк самостоятельно проверяет их и записывает отчёт в удобном формате.</p>
+      
+      <h3 class="section-title">PageObject для Allurium</h3>
+      <p>Для создания PageObject в случае использования Allurium подход не сильно меняется. Всё должно быть чётко структурировано и типизировано, чтобы каждый вид элемента имел свой правильный тип, а фреймворк понимал, как с ним работать, и составлял корректное описание в отчёте.</p>
+      
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class FormPage extends Page {
+
+    @Name("Login")
+    @Locator(css = "#login")
+    protected TextField fieldLogin;
+
+    @Name("Email")
+    @Locator(css = "#email")
+    protected TextField fieldEmail;
+
+    @Name("Password")
+    @Locator(css = "#password")
+    protected TextField fieldPassword;
+
+    @Name("Rank")
+    protected TextField fieldRank = $textField("#rank");
+
+    @Name("Date")
+    protected TextField fieldDate = _$textField("//input[@id='date']");
+
+    @Name("Telephone")
+    @Locator(css = "#tel")
+    protected TextField fieldTelephone;
+
+    @Name("Avatar")
+    @Locator(css = "#file")
+    protected UploadField uploadAvatar;
+
+    @Name("Gender Male")
+    @Locator(css = "#male")
+    protected Button radioBtnMale;
+
+    @Name("Gender Female")
+    @Locator(css = "#female")
+    protected Button radioBtnFemale;
+
+    @Name("Preferable time - Morning")
+    @Locator(css = "#checkbox1")
+    protected CheckBox ckbMorning;
+
+    @Name("Preferable time - Evening")
+    @Locator(css = "#checkbox2")
+    protected CheckBox ckbEvening;
+
+    @Name("Experience")
+    @Locator(css = "#experience")
+    protected DropdownSelect ddExperience;
+
+    @Name("Working Days")
+    @Locator(css = "#multiple-select")
+    protected Select selectWorkingDays;
+
+    @Name("Reset")
+    @Locator(css = ".btn-secondary")
+    protected Button btnReset;
+
+    @Name("Submit")
+    @Locator(css = ".btn-primary")
+    protected Button btnSubmit;
+}
+</code></pre>
+      
+      <p>В данном случае PageObject выглядит объёмнее, но количество строк можно сделать одинаковым, всё зависит от выбранного подхода. Я предпочитаю оставлять отступы между полями с аннотациями — это улучшает читаемость.</p>
+      
+      <p>В структуре Allurium фундаментальными являются классы, отмеченные аннотацией <code>@PageObject</code>. Они служат контейнерами, в которых располагаются виджеты и простые элементы. Одна страница = один PageObject. Объекты страниц могут быть наследуемыми и расширяемыми без ограничений.</p>
+      
+      <p>Внутри нашего PageObject <strong>FormPage</strong> располагаются простые элементы. Не все элементы имеют тип <code>SelenideElement</code> — каждый элемент имеет соответствующий ему тип:</p>
+      <ul>
+        <li><strong>TextField</strong> — текстовое поле ввода</li>
+        <li><strong>UploadField</strong> — поле загрузки файла</li>
+        <li><strong>CheckBox</strong> — чекбокс</li>
+        <li><strong>DropdownSelect</strong> — выпадающий список (Select) с выбором одной опции</li>
+        <li><strong>Select</strong> — список (Select) с возможностью выбора нескольких опций</li>
+        <li><strong>Button</strong> — кнопка</li>
+      </ul>
+      
+      <h3 class="section-title">Объявление элемента</h3>
+      <p>При объявлении элемента, кроме типа, нужно всегда присваивать ему имя. Я предпочитаю использовать аннотацию <code>@Name("name")</code> вместо вызова <code>.as("name")</code>. Это позволяет создавать экземпляры в нужный момент без лишних сложностей и выглядит более эстетично. Однако можно присваивать имя и через конструктор объекта.</p>
+      
+      <p>Например, вместо:</p>
+      <pre><code class="language-java">@Name("Submit")
+@Locator(css = ".btn-primary")
+protected Button btnSubmit;
+</code></pre>
+      
+      <p>можно написать:</p>
+      <pre><code class="language-java">protected Button btnSubmit = $button(".btn-primary", "Submit");
+</code></pre>
+      
+      <p>Либо, если экземпляр уже создан, через <code>setName("some-name")</code>:</p>
+      <pre><code class="language-java">Button btnSubmit = $button(".btn-primary");
+btnSubmit.setName("Submit");
+</code></pre>
+      
+      <p>Далее необходимо указать локатор. Это можно сделать разными способами:</p>
+      <ol>
+        <li>
+          <p><strong>Подобно тому, как делали это с SelenideElement:</strong></p>
+          <pre><code class="language-java">@Name("Submit")
+protected Button btnSubmit = $button(".btn-primary");
+</code></pre>
+          <p>Где <code>".btn-primary"</code> — CSS-селектор кнопки. Примитивные элементы, такие как кнопки, текстовые поля и блоки текста, уже описаны во фреймворке. Экземпляр создаётся статическим методом, аналогично созданию SelenideElement:</p>
+          <pre><code class="language-java">protected SelenideElement btnSubmit = Selenide.$(".btn-primary").as("Submit");
+</code></pre>
+          <p>При этом <code>Selenide.$</code> заменяется на просто <code>$</code> (импортируется как статический метод).</p>
+          <p>Длинный вариант был бы:</p>
+          <pre><code class="language-java">@Name("Submit")
+protected Button btnSubmit = Button.$button(".btn-primary");
+</code></pre>
+          <p>А короткий вариант через static метод:</p>
+          <pre><code class="language-java">@Name("Submit")
+protected Button btnSubmit = $button(".btn-primary");
+</code></pre>
+          <p>Если перед символом <code>$</code> поставить нижнее подчёркивание (<code>_</code>), как в примере ниже, элемент будет искаться по XPath:</p>
+          <pre><code class="language-java">@Name("Date")
+protected TextField fieldDate = _$textField("//input[@id='date']");
+</code></pre>
+        </li>
+        <li>
+          <p><strong>Можно создать экземпляр через конструктор:</strong></p>
+          <pre><code class="language-java">@Name("Submit")
+protected Button btnSubmit = new Button(".btn-primary");
+</code></pre>
+        </li>
+        <li>
+          <p><strong>Или с помощью аннотации <code>@Locator</code>, аналогично <code>@FindBy</code> в Selenium:</strong></p>
+          <pre><code class="language-java">@Name("Submit")
+@Locator(css = ".btn-primary")
+protected Button btnSubmit;
+</code></pre>
+          <p>В этом случае экземпляр объявлять не обязательно — он автоматически создаётся фреймворком, если у элемента присутствует аннотация <code>@Locator</code>.</p>
+          <p><code>@Locator</code> может принимать следующие типы локаторов:</p>
+          <ul>
+            <li>css — эквивалент <code>By.cssSelector(".btn-primary")</code></li>
+            <li>xpath — эквивалент <code>By.xpath("//*[@class='btn-primary']")</code></li>
+            <li>className — эквивалент <code>By.className("btn-primary")</code></li>
+            <li>id — эквивалент <code>By.id("#id")</code></li>
+          </ul>
+        </li>
+      </ol>
+      
+      <p>Для открытия браузера и загрузки страницы вместо <code>Selenide.open("url");</code> используется <code>UiSteps.openBrowser(url);</code> — этот шаг также записывается в отчёт. <code>UiSteps</code> — класс со статическими методами, не привязанными к конкретной странице или элементу, которые фреймворк трактует как шаги и логирует в отчёт.</p>
+      
+      <h3 class="section-title">Вызов и логирование шагов</h3>
+      <p>В данной системе каждый элемент имеет набор базовых и специфичных методов (шагов), которые при вызове логируются фреймворком как шаги отчёта. Например, методы <code>contextClick()</code> и <code>doubleClick()</code> доступны для любого элемента, а метод <code>write("some text")</code> присутствует только там, где возможен ввод текста (например, у <code>TextField</code> или <code>TextArea</code>).</p>
+      <p>Все шаги являются публичными, и при их вызове фреймворк автоматически записывает информацию в отчёт, делая его максимально читаемым.</p>
+      
+    </div>
+
+    <div class="nav-links text-center mt-5">
+        <a href="./../fillListOfSimpleInputElements/fillListOfSimpleInputElements.html" class="btn btn-outline-secondary">Списки простых элементов, поиск и использование &nbsp;&raquo;</a>
+      </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - under MIT License</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

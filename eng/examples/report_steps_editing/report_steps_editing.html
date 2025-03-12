@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Customizing Steps</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+      display: block;
+      white-space: pre-wrap;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+              </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/report_steps_editing/report_steps_editing.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Customizing Steps</h1>
+      <p class="lead">Modifying Step Templates</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">      
+      <p>In Allurium, test steps are automatically logged in the report, but if you need to change their description, you can do so by using the file <code>allurium-steps.yml</code>.</p>
+      
+      <p>For example, let's change the description of the <code>assertVisible</code> step in reports in English. This is one of the most frequently used asserts present for every element.</p>
+      
+      <p>Find the corresponding entry in the file <code>allurium-steps.yml</code>:</p>
+      
+      <pre><code class="language-yaml">
+assert_visible:
+  1: "Assert that the {name} {element} is visible"
+  2: "Assert that the {name} {element} of {parent} is visible"
+      </code></pre>
+      
+      <p>Where:</p>
+      <ul>
+        <li><code>{name}</code> — the element name, taken from the <code>@Name</code> annotation</li>
+        <li><code>{element}</code> — the type of element or widget.</li>
+        <li><code>{parent}</code> — the name of the parent widget, if the element is inside another widget.</li>
+      </ul>
+      
+      <p>Change the template to:</p>
+      
+      <pre><code class="language-yaml">
+assert_visible:
+  1: "Lets check that the {name} {element} is really visible"
+  2: "Lets check that the {name} {element} of {parent} is really visible"
+      </code></pre>
+      
+      <p>Add the <code>assertVisible</code> call to the test <code>fillTheForm</code></p>
+      
+      <pre><code class="language-java">
+@Test
+@Feature("Form")
+@DisplayName("Filling the example form")
+public void fillTheForm() {
+    // .. existing code
+
+    formPage.fieldLogin().assertVisible();
+    formPage.fieldLogin().write("John");
+
+    // the rest of the code...
+}
+      </code></pre>
+      
+      <p>Run the test and check the report:</p>
+      
+      <div class="text-center my-3">
+        <img src="img/allurium_report.jpg" alt="Report with modified step" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">Other Available Variables</h3>
+      
+      <p>In the file <code>allurium-steps.yml</code>, in addition to the variables we have discussed (<code>{name}</code>, <code>{element}</code>, <code>{parent}</code>), there are others.</p>
+      
+      <p>Example for the <code>assert_has_css_class</code> step:</p>
+      
+      <pre><code class="language-yaml">
+assert_has_css_class:
+  1: "Assert that the {name} {element} has the CSS class {clazz}"
+  2: "Assert that the {name} {element} of {parent} has the CSS class {clazz}"
+      </code></pre>
+      
+      <p>Where <code>{clazz}</code> — is the CSS class of the element.</p>
+      
+      <p>It is used as follows:</p>
+      
+      <pre><code class="language-java">
+formPage.fieldLogin().assertHasCssClass("form-control");
+      </code></pre>
+      
+      <p>Another common example — working with text, indicated by {text}:</p>
+      
+      <pre><code class="language-yaml">
+write:
+  1: "Write \"{text}\" to the {name} {element}"
+  2: "Write \"{text}\" to the {name} {element} of {parent}"
+      </code></pre>
+      
+      <p>This template is used when inputting text:</p>
+      
+      <pre><code class="language-java">
+formPage.fieldLogin().write("John");
+      </code></pre>
+      
+      <p>The remaining variables in the templates should be self-explanatory.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../changing_names_wrapping_in_reports/changing_names_wrapping_in_reports.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Editing Element Name Wrapping in the Report
+        </a>
+        <a href="./../steps_detailing_level/steps_detailing_level.html" class="btn btn-outline-secondary">
+            Changing Step Detailing &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f"
+          crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allurium - Java Testing Framework</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+      body {
+        line-height: 1.6;
+      }
+      pre {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        overflow-x: auto;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-size: 0.95em;
+      }
+      .section-title {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+      iframe {
+      width: 100%;
+      height: 800px;
+      border: none;
+    }
+    </style>
+  </head>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container">
+            <a class="navbar-brand" href="index.html">Allurium</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="quick_start.html">Быстрый старт</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="introduction.html">Intro</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="faq.html">FAQ</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="java_doc.html">Javadoc</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+                </li>
+              </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="./../eng/introduction.html">Eng</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Rus</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Вступление</h1>
+            <p class="lead">Java testing framework for streamlined and efficient test creation.</p>
+        </div>
+    </section>
+
+    <!-- Main Content Section -->
+  <section id="introduction" class="py-5">
+    <div class="container">
+    
+      <p>
+        В этой статье хочу поделиться инструментом, который я понемногу разрабатывал и улучшал при наличии свободного времени. Применяя для упрощения своих задач, над которыми я работал в разных компаниях за это время.
+      </p>
+      
+      <h5>Работа в автоматизации тестирования</h5>
+      <p>
+        Работа в автоматизации тестирования стала моей оффициальной профессией несколько лет назад. За это время мне довелось позаниматься очень широким спектром задач, в зависимости от компаний, где я работал. Начиная с тестирования пользовательских интерфейсов различных сайтов, web и мобильных приложений, обязанности заводили меня глубоко в тестирование сложных API сервисов и даже автоматизацию десктопных программ.
+      </p>
+      
+      <p>
+        Первые годы я плотно занимался тестированием Web приложений на Java, хотя начинал не с неё. Разумеется, перепробовав много подходов, я нашёл для себя любимый stack, который применял при наличии свободы выбора. Для меня это сложилось в TestNg + Selenium + Allure. Естественно, мне приходилось работать со знаменитым <em>Cucumber</em>, а потом и вообще с чудовищьным (на мой взгляд) <em>Serenity</em> и ещё многими другими решениями, включая кастомные разработки разных людей.
+      </p>
+      
+      <h5>Отказ от BDD и сложности автологирования</h5>
+      <p>
+        Моё расположение никогда не лежало в сторону BDD, так как чаще всего я сам читал отчёты и проверял тесты, и в 100% случаев сам составлял сценарии с Gherkin (иногда по предоставленным сценариям, чаще нет). Так называемое удобство, дающее BDD пользователю, сводилось к минимуму, а вот взамен требовало многое — небоскрёбы из обёрток классов, сложности с наследованием, необходимость создавать кучу дубликатов мизерных действий, абсолютное неудобство передачи данных между шагами и процессами и прочие трудности.
+      </p>
+      
+      <h5>Появление Selenide и автологирования шагов</h5>
+      <p>
+        Потом пришёл Selenide, сделавший отказ от BDD-фреймворков ещё более обоснованным (хотя не сразу и не без оговорок). Тем не менее, BDD-отчёты мне в принципе нравились – они почти всегда были более содержательными и легко читаемыми, чем отчёты, собираемые через аннотации <code>@Step</code> в Allure, и куда более читаемыми, чем встроенное автологирование Allure.
+      </p>
+      
+      <p>
+        Если же хотелось сделать отчёт более содержательным и интуитивно понятным без BDD-подходов и фреймворков, приходилось бы, как и в BDD, оборачивать каждое минимальное действие в обёртку шага. Например:
+      </p>
+      
+      <pre><code class="language-java">public class FormPage {
+    SelenideElement btnSave = $(".btn-primary").as("Save");
+}</code></pre>
+      
+      <p>
+        Данный способ предоставит простейший автогенерированный лог на событие <code>btnSave.click();</code> – что-то типа "Step1: Click Save".
+      </p>
+      
+      <h5>Проблема с обёртками в сложных сценариях</h5>
+      <p>
+        Конечно, можно сказать, что любой сценарий состоит из последовательности простых действий. Может, в идеальном мире, так и было бы, но если попробовать написать тест для CRM, содержащей десятки таблиц, множество виджетов в каждой записи, сложные фильтрации, поисковые запросы, загрузки, импорты данных, динамические события и прочее – итоговый тест может состоять из 50–60 строк, где каждая строка является достаточно сложным шагом. После этого, взглянув на автогенерированный отчёт, спорить о его "легкочитаемости" будет крайне сложно.
+      </p>
+      
+      <p>
+        Однако, если я хочу увидеть в отчёте нормальное описание шага, например:
+      </p>
+      
+      <pre><code class="language-java">"Click on the &lt;Save&gt; button of the &lt;User settings dialog&gt;"</code></pre>
+      
+      <p>
+        то придётся писать обёртку:
+      </p>
+      
+      <pre><code class="language-java">@Step("Click on the &lt;Save&gt; button of the &lt;User settings dialog&gt;")
+public void clickBtnSave() {
+    btnSave.click();
+}</code></pre>
+      
+      <p>
+        Либо можно, например, так:
+      </p>
+      
+      <pre><code class="language-java">public class FormPage {
+    SelenideElement btnSave = $(".btn-primary").as("the &lt;Save&gt; button of the &lt;User settings widget&gt;");
+}</code></pre>
+      
+      <p>
+        В отчёте это будет выглядеть лучше, но, во-первых, не настолько, а во-вторых, если эта кнопка располагается в каждой записи длинного списка пользователей, где каждая строка является сложным виджетом с множеством различных элементов, включая кнопку, мы получим ElementsCollection, отфильтруем её по какому-то устойчивому параметру, найдём нужные и нажмём на кнопку в каждой записи. Все действия в отчёте будут выглядеть одинаково.
+      </p>
+      
+      <h5>Проблемы с коллекциями элементов</h5>
+      <p>
+        В итоге мы вернёмся к большому недостатку BDD-подхода — будем плодить тонны обёрточных методов для каждого мизерного клика, а таких в web-приложениях может быть сотни. И это только для клика! Прибавьте другие действия, контекстные меню, операции с различными полями ввода, события, проверки от простого текста до html-атрибутов и т.д. и умножьте на количество элементов в приложении. Каждое малейшее действие требует конкретного описания, а если пойти по BDD-подходу, то тестовый проект может оказаться намного больше тестируемого приложения, что неоднократно подтверждалось на практике.
+      </p>
+      
+      <h5>Операции с коллекциями элементов</h5>
+      <p>
+        Еще большую боль, как с BDD-фреймворками, так и без них, доставляют операции с коллекциями элементов. Всевозможные поиски, фильтрации и проверки требуют конкретных описаний шагов, которые плодятся со страшной скоростью.
+      </p>
+      
+      <p>
+        Например, в таблице данных пользователей может быть 30 и более параметров:
+      </p>
+      
+      <pre><code class="language-java">public class FormPage {
+    ElementsCollection btnSave = $$(".user-record").as("Users settings list");
+}</code></pre>
+      
+      <p>
+        Что если нам нужно сделать проверку каждого в отдельности из 30 параметров и для каждого создать отдельный метод с описанием? То есть:
+      </p>
+      
+      <pre><code class="language-java">public class FormPage {
+    ElementsCollection users = $$(".user-record").as("Users settings list");
+
+    public void assertEmail(String userId, String expectedEmail) {
+        String targetEmail = users.filter(Condition.text(userId)).first().$x("div[@id='#email-container']").text();
+        Assertions.assertThat(targetEmail).as("User email").isEqualTo(expectedEmail);
+    }
+}</code></pre>
+      
+      <p>
+        И делать так для остальных 29 параметров? Конечно, нет. Тут надо сказать, что следует создать DataObject с параметрами пользователя и написать универсальный метод, который будет брать этот объект и проходить по каждому полю, сравнивая все параметры посредством Soft Assert. Да, это здоровое решение, но всё равно придётся писать логику, а о красивом автологируемом отчёте можно забыть.
+      </p>
+      
+      <h5>Недостатки автоматического логирования Allure отчетов Selenide</h5>
+      <p>
+        То, что Allure отчёты Selenide генерировались автоматически, меня не устраивало. Ведь спустя время, чтобы вспомнить какой-то сценарий и понять, что произошло, приходилось напрягаться даже мне, не говоря уже о том, если отчёт смотрит человек, не знакомый с кодом. Кроме того, в некоторых случаях отчёты приходилось делать не на английском языке.
+      </p>
+      
+      <h5>Цель создания Allurium</h5>
+      <p>
+        Идеального инструмента не бывает, но я задумывался и пытался найти решение, которое позволит исключить большинство сложностей любого подхода. Мне хотелось сделать так, чтобы всё, что я делал, – это определял сущности страниц, виджетов и элементов, и писал сценарий, а всё остальное делал бы фреймворк сам. Таким образом мне почти не пришлось бы писать логику шагов, а она сама организовывалась бы на основании структуры кода и типов данных, не ограничивая свободный стиль Selenide. При этом фреймворк должен автоматически собирать и логировать все вызываемые действия, максимально приближая их к красивым BDD-отчётам и предоставляя возможность редактировать этот процесс по желанию.
+      </p>
+      
+      <h5>Мои рассуждения</h5>
+      <ol>
+        <li>Нужно взять стандартную и понятную структуру, но добавить больше конкретики.</li>
+        <li>Каждая сущность должна иметь ожидаемые свойства и методы поведения, большинство из которых реализованы сразу из коробки.</li>
+        <li>Каждая сущность, будь то страница, виджет или элемент, должна понимать, где она находится и к чему принадлежит.</li>
+        <li>Все сущности должны быть легко расширяемыми; должна быть возможность добавлять любые кастомные элементы, компоненты и доработки.</li>
+        <li>Фреймворк должен на 99% самостоятельно собирать метаданные объектов.</li>
+        <li>Фреймворк должен опираться на Allure и Selenide, не ограничивая их возможности.</li>
+        <li>Я должен наконец избавиться от поиска элементов через фильтрацию, а вообще от поиска в списках, и забыть как о страшном сне.</li>
+        <li>Код должен повторяться минимум (DRY). Даже объекты страниц должны быть легко расширяемыми и переиспользуемыми.</li>
+        <li>Фреймворк должен включать множество заранее реализованных действий пользователя с браузером, которые логируются в отчёты.</li>
+        <li>Я должен мочь редактировать логируемые шаги и определять степень их подробности динамически.</li>
+        <li>И, наконец, красивые отчёты должны собираться на разных языках, а не только на английском.</li>
+      </ol>
+      
+      <h5>Структура PageObject</h5>
+      <p>
+        Начиная с пункта 1, я хотел видеть примерно такую структуру. Я указываю аннотацией классу, что он является страницей. Элементы и виджеты страницы должны быть представлены соответствующими типами этих элементов.
+      </p>
+      
+      <h4>PageObject с простыми элементами</h4>
+      <pre><code class="language-java">@PageObject
+public class FormPage {
+
+    @Name("Login")
+    @Locator(css = "#login")
+    protected TextField fieldLogin;
+
+    @Name("Email")
+    @Locator(css = "#email")
+    protected TextField fieldEmail;
+
+    @Name("Password")
+    @Locator(css = "#password")
+    protected TextField fieldPassword;
+
+    // ... другие поля
+}
+      </code></pre>
+      
+      <h4>PageObject с виджетами</h4>
+      <pre><code class="language-java">@PageObject
+public class HomePage {
+
+    @Name("Navigation bar")
+    NavBar navBar;
+
+    @Name("Search block")
+    SearchBlock searchBlock;
+
+    @Name("Gallery block")
+    GalleryBlock galleryBlock;
+
+    @Name("Footer")
+    Footer footer;
+}
+      </code></pre>
+      
+      <h4>Описание виджетов</h4>
+      <pre><code class="language-java">@Widget
+public static class NavBar extends AbstractWidget {
+
+    @Name("Images")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(1)")
+    protected Link linkPhotos;
+
+    @Name("Stickers")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(2)")
+    protected Link linkStickers;
+
+    @Name("Icons")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(3)")
+    protected Link linkIcons;
+}
+      </code></pre>
+      
+      <p>
+        Где:
+      </p>
+      <ul>
+        <li><code>@PageObject</code> — указывает, что класс является страницей;</li>
+        <li><code>@Widget</code> — указывает, что класс является виджетом (частью страницы);</li>
+        <li><code>@Name</code> — присваивает элементу или виджету конкретное название;</li>
+        <li><code>@Locator</code> — один из способов указать путь до объекта на HTML-странице.</li>
+      </ul>
+      
+      <p>
+        Тестовый сценарий, как положено, не должен содержать логики, а представлять собой последовательное обращение к методам виджетов и элементов.
+      </p>
+      
+      <p>
+        Я набросал следующую схему и стал работать над её реализацией.
+      </p>
+      
+        <iframe src="./../shared/framework-scheme.html"></iframe>
+      
+        <p>
+          Я решил не выпендриваться и просто сложил название из технологий в фундаменте – получилось "Allurium". Далее будут рассмотрены примеры, иллюстрирующие суть работы и устройство фреймворка.
+        </p>
+    </div>
+
+    <div class="nav-links text-center mt-5">
+      <a href="./../rus/quick_start.html" class="btn btn-outline-secondary">
+        <b>Быстрый Старт</b> &nbsp;&raquo;
+      </a>
+    </div>
+  </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </footer>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" crossorigin="anonymous"></script>
+</body>
+</html>

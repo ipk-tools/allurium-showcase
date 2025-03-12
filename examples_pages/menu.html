@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizontal Menu Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .menu-container {
+            width: 100%;
+            background-color: #f2f2f2;
+        }
+        .menu, .submenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu {
+            display: flex;
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ddd;
+        }
+        .menu > li {
+            position: relative;
+        }
+        .menu > li > a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+        .menu > li:hover {
+            background-color: #ddd;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            z-index: 1000;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+        .menu > li:hover > .submenu,
+        .submenu > li:hover > .submenu {
+            display: block;
+        }
+        .submenu > li {
+            position: relative;
+        }
+        .submenu > li > a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+        }
+        .submenu > li:hover {
+            background-color: #ddd;
+        }
+        .submenu .submenu {
+            left: 100%;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <ul class="menu">
+            <li>
+                <a href="#">Main Item 1</a>
+            </li>
+            <li>
+                <a href="#">Main Item 2</a>
+                <ul class="submenu">
+                    <li><a href="#">Sub Item 1</a></li>
+                    <li><a href="#">Sub Item 2</a></li>
+                    <li>
+                        <a href="#">Sub Item 3</a>
+                        <ul class="submenu">
+                            <li><a href="#">Sub Sub Item 1</a></li>
+                            <li><a href="#">Sub Sub Item 2</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Main Item 3</a>
+            </li>
+            <li>
+                <a href="#">Main Item 4</a>
+                <ul class="submenu">
+                    <li><a href="#">Level 1 Item 1</a></li>
+                    <li><a href="#">Level 1 Item 2</a></li>
+                    <li>
+                        <a href="#">Level 1 Item 3</a>
+                        <ul class="submenu">
+                            <li><a href="#">Level 2 Item 1</a></li>
+                            <li><a href="#">Level 2 Item 2</a></li>
+                            <li>
+                                <a href="#">Level 2 Item 3</a>
+                                <ul class="submenu">
+                                    <li><a href="#">Level 3 Item 1</a></li>
+                                    <li><a href="#">Level 3 Item 2</a></li>
+                                    <li>
+                                        <a href="#">Level 3 Item 3</a>
+                                        <ul class="submenu">
+                                            <li><a href="#">Level 4 Item 1</a></li>
+                                            <li><a href="#">Level 4 Item 2</a></li>
+                                            <li>
+                                                <a href="#">Level 4 Item 3</a>
+                                                <ul class="submenu">
+                                                    <li><a href="#">Level 5 Item 1</a></li>
+                                                    <li><a href="#">Level 5 Item 2</a></li>
+                                                    <li><a href="#">Level 5 Item 3</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

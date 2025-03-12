@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Changing Step Detailing</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+      display: block;
+      white-space: pre-wrap;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/steps_detailing_level/steps_detailing_level.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Changing Step Detailing</h1>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      
+      <p>As seen in the example above, in the <code>allurium-steps.yml</code> file with step templates there are two variants of descriptions.</p>
+      
+      <p>
+        The <b>first</b> is the basic step description, and the <b>second</b> is more informative, including the position of the object.
+        We can choose which level of detailing to use in the reports.
+      </p>
+      
+      <p>To do this, you need to:</p>
+      <ul>
+        <li>Open the <code>allurium.properties</code> file in <code>src/main/resources</code></li>
+        <li>Find or add the parameter: <code>step.detailing=1</code> or <code>step.detailing=2</code></li>
+      </ul>
+      
+      <p>Now, depending on the specified level, the report will display different levels of detail.</p>
+      
+      <h3 class="section-title">When <code>step.detailing=1</code></h3>
+      <div class="text-center">
+        <img src="img/report_level_1.jpg" alt="Report with level 1 detailing" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">When <code>step.detailing=2</code></h3>
+      <div class="text-center">
+        <img src="img/report_level_2.jpg" alt="Report with level 2 detailing" class="img-fluid">
+      </div>
+      
+      <p>
+        Originally, this feature was designed solely to change the report's detailing, but it can also be used for alternative wording of steps and simple switching,
+        as there are no restrictions on rewriting step templates, as discussed earlier.
+      </p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../report_steps_editing/report_steps_editing.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Customizing Steps
+        </a>
+        <a href="./../report_different_lang/report_different_lang.html" class="btn btn-outline-secondary">
+          Choosing Report Localization &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion Example</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="row">
+    <!-- Menu on the left -->
+    <div class="col-md-4">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+      </div>
+    </div>
+
+    <!-- Accordion on the right -->
+    <div class="col-md-8">
+      <div id="accordion">
+        <div>
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Chapter 1
+                </button>
+              </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                Once upon a time, in the vast and intricate world of Computerland, there lived two distinct tribes: the JavaScriptians and the Javans. Though both tribes shared a lineage, tracing back to the ancient Order of Code, their paths had diverged long ago, leading them to inhabit very different realms.
+                The JavaScriptians lived in the bustling, dynamic City of Web, a place of endless possibility where the buildings reshaped themselves at the whim of their inhabitants. Everything in the City of Web was alive with motion, from the scrolling landscapes to the streaming rivers of data.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Chapter 2
+                </button>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                The Javans, on the other hand, resided in the structured and majestic Kingdom of Server, a land of powerful machines and intricate systems. The Kingdom was known for its reliability and strength, with castles built on strong typing and synchronized operations.
+                One day, a young and curious JavaScriptian named Ajax ventured into the Java lands. His heart was full of questions and a desire to understand the mysteries of the Javans. Ajax was well-equipped with the powers of Asynchrony and Closure, gifts from the gods of Web, but he soon realized that the rules of the Kingdom of Server were quite different.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Chapter 3
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                As Ajax traveled through the Java lands, he encountered strange creatures known as "Threads," who moved in precise, orderly patterns, unlike anything he had seen in the City of Web. He also marveled at the mighty "Garbage Collector," a beast that roamed the land, consuming unused objects to keep the kingdom clean and efficient.
+                In his travels, Ajax met a wise Javan knight named Sir Compilealot, who wielded the powerful Sword of Static Typing. Sir Compilealot saw the curiosity in Ajax's eyes and decided to share the secrets of the Java lands with him. Together, they explored the vast libraries of the Kingdom, learning from each other's ways.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingFour">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  Chapter 4
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+              <div class="card-body">
+                Ajax taught Sir Compilealot the art of dynamic typing and the magic of event-driven programming, showing him how to create vibrant, interactive experiences. In return, Sir Compilealot taught Ajax the ways of the Javans, including the principles of concurrency and the strength of type safety.
+                Through their adventures, Ajax and Sir Compilealot discovered that despite their differences, the JavaScriptians and Javans shared a common goal: to create, innovate, and solve the puzzles of Computerland. They realized that by combining their strengths, they could build bridges between the City of Web and the Kingdom of Server, fostering a new era of collaboration and understanding.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingFive">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  Chapter 5
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+              <div class="card-body">
+                As Ajax returned to the City of Web, he brought with him the knowledge and friendships he had gained in the Java lands. The JavaScriptians and Javans began to work together, blending their technologies and cultures to create marvelous new constructs that were both dynamic and reliable.
+                And so, the adventures of Ajax in the Java lands became legend, a tale of curiosity, friendship, and the unity of code. The tribes of Computerland learned that although their languages might differ, their hearts beat with the same rhythm of creation, forever intertwined in the endless quest for innovation.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Link to Bootstrap JavaScript and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

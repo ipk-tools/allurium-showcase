@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compact Interactive Hierarchy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center;">Framework entities composition example</h1>
+<canvas id="hierarchyCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById("hierarchyCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Dynamically adjust canvas size
+  canvas.width = window.innerWidth * 0.8; // 80% of the window width
+  canvas.height = window.innerHeight * 0.8; // 80% of the window height
+
+  let offsetX = 0; // Panning offset for X-axis
+  let offsetY = 0; // Panning offset for Y-axis
+  let zoom = 1;    // Zoom level
+
+  // Event listeners for zooming (mouse wheel)
+  canvas.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const zoomIntensity = 0.1;
+    zoom += e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+    // Clamp zoom between 0.5 and 3
+    zoom = Math.max(0.5, Math.min(3, zoom));
+    draw();
+  });
+
+  // Event listeners for panning (mouse drag)
+  let isDragging = false;
+  let startX, startY;
+
+  canvas.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    startX = e.offsetX - offsetX;
+    startY = e.offsetY - offsetY;
+  });
+
+  canvas.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      offsetX = e.offsetX - startX;
+      offsetY = e.offsetY - startY;
+      draw();
+    }
+  });
+
+  canvas.addEventListener("mouseup", () => {
+    isDragging = false;
+  });
+
+  canvas.addEventListener("mouseleave", () => {
+    isDragging = false;
+  });
+
+  // Color array for hierarchy depth highlighting
+  const colorsByDepth = [
+    "#fce8e8", // Depth 1
+    "#e8fcef", // Depth 2
+    "#e8f2fc", // Depth 3
+    "#fcfce8", // Depth 4
+    "#f3e8fc", // Depth 5
+    "#fce8f2", // Depth 6 (and so on...)
+  ];
+
+  // Helper to draw rectangles with text, colored by depth
+  function drawBlock(x, y, width, height, text, depth) {
+    const color = colorsByDepth[(depth - 1) % colorsByDepth.length];
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
+
+    ctx.strokeStyle = "#000";
+    ctx.strokeRect(x, y, width, height);
+
+    ctx.fillStyle = "#000";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x + width / 2, y + height / 2);
+  }
+
+  // Helper to draw arrows with shorter heads
+  function drawArrow(x1, y1, x2, y2) {
+    const arrowHeadLength = 8; // Smaller arrowhead
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const angle = Math.atan2(dy, dx);
+    const lineLength = Math.sqrt(dx * dx + dy * dy);
+
+    // Shorten the line slightly for a gap between blocks
+    const shortenedLineLength = lineLength - 14; // bigger gap => bigger offset
+    const shortenedX2 = x1 + (shortenedLineLength / lineLength) * dx;
+    const shortenedY2 = y1 + (shortenedLineLength / lineLength) * dy;
+
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(shortenedX2, shortenedY2);
+    ctx.stroke();
+
+    // Draw arrowhead
+    ctx.beginPath();
+    ctx.moveTo(shortenedX2, shortenedY2);
+    ctx.lineTo(
+      shortenedX2 - arrowHeadLength * Math.cos(angle - Math.PI / 6),
+      shortenedY2 - arrowHeadLength * Math.sin(angle - Math.PI / 6)
+    );
+    ctx.lineTo(
+      shortenedX2 - arrowHeadLength * Math.cos(angle + Math.PI / 6),
+      shortenedY2 - arrowHeadLength * Math.sin(angle + Math.PI / 6)
+    );
+    ctx.lineTo(shortenedX2, shortenedY2);
+    ctx.fillStyle = "#000";
+    ctx.fill();
+  }
+
+  // Recursive function to draw the hierarchy
+  function drawHierarchy(x, y, width, height, data, depth = 1, maxDepth = 5) {
+    // We use fixed spacing to avoid the diagram becoming too wide
+    const spacingX = 150;  // Horizontal gap between siblings
+    const spacingY = 80;   // Vertical gap between parent and children
+
+    drawBlock(x, y, width, height, data.name, depth);
+
+    // If this node has children
+    if (data.children && data.children.length > 0) {
+      // Calculate the total width for all children combined
+      const totalChildWidth = (data.children.length - 1) * spacingX;
+      let startX = x + width / 2 - totalChildWidth / 2; 
+      // 'startX' is the center of the parent block horizontally, 
+      // minus half the total width needed for all child blocks.
+
+      data.children.forEach(child => {
+        // Coordinates for the child's block
+        const childX = startX - width / 2; // offset half the parent's width
+        const childY = y + height + spacingY;
+
+        // Draw an arrow from the parent's bottom center to child's top center
+        drawArrow(
+          x + width / 2,  // parent's center bottom
+          y + height,
+          childX + width / 2, // child's center top
+          childY
+        );
+
+        // Recursively draw the child
+        drawHierarchy(childX, childY, width, height, child, depth + 1, maxDepth);
+
+        startX += spacingX; // Move horizontally for the next sibling
+      });
+    }
+  }
+
+  // Function to calculate maximum depth of the hierarchy
+  function calculateDepth(data) {
+    if (!data.children || data.children.length === 0) return 1;
+    return 1 + Math.max(...data.children.map(calculateDepth));
+  }
+
+  // Sample hierarchy data
+  const hierarchy = {
+    name: "PageObject",
+    children: [
+      { name: "UiElement", children: [] },
+      { name: "List<UiElement>", children: [] },
+      {
+        name: "AbstractWidget",
+        children: [
+          { name: "UiElement", children: [] },
+          { name: "List<UiElement>", children: [] },
+          { name: "List<AbstractWidget>", children: [] },
+          {
+            name: "AbstractWidget",
+            children: [
+              { name: "UiElement", children: [] },
+              { name: "List<UiElement>", children: [] },
+              { name: "List<AbstractWidget>", children: [] },
+              {
+                name: "AbstractWidget",
+                children: [
+                  { name: "UiElement", children: [] },
+                  { name: "List<UiElement>", children: [] },
+                  { name: "List<AbstractWidget>", children: [] },
+                  { name: "AbstractWidget → ...", children: [] },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      { name: "List<AbstractWidget>", children: [] },
+    ],
+  };
+
+  // Calculate maximum depth for spacing or reference (unused in this simpler approach)
+  const maxDepth = calculateDepth(hierarchy);
+
+  // Main draw function with panning and zooming
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(offsetX, offsetY); // Apply panning
+    ctx.scale(zoom, zoom);           // Apply zooming
+
+    // Draw from the center top of the canvas
+    const blockWidth = 120;
+    const blockHeight = 40;
+    drawHierarchy(
+      canvas.width / 2 - blockWidth / 2,  // Start at horizontal center
+      20,                                 // Some top margin
+      blockWidth,
+      blockHeight,
+      hierarchy,
+      1,
+      maxDepth
+    );
+
+    ctx.restore();
+  }
+
+  draw(); // Initial draw
+</script>
+</body>
+</html>

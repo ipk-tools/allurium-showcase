@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Creating Your Own Element</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/makeNewElementRequitedField/makeNewElementRequitedField.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Creating Your Own Element</h1>
+      <p class="lead">Example 11</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      <h2 class="section-title">Example 11 - Creating Your Own Element</h2>
+      
+      <p>Now we can consider creating our very own custom element.</p>
+      <p>Suppose we need to validate a form where certain fields are mandatory. Such a field is the "Login" field in the form discussed above. In our example, it is required to verify that an empty field, after pressing <code>Submit</code>, displays the message <strong>"This field is required."</strong> right below the field.</p>
+      
+      <div class="text-center my-3">
+        <img src="img/makeNewElementRequitedField.jpg" alt="Creating an element with a required field">
+      </div>
+      
+      <h3 class="section-title">1. Creating the RequiredTextField Class</h3>
+      <p>The first step is to create the <code>RequiredTextField</code> class and inherit from the native <code>TextField</code> class. This way, we gain immediate access to all its properties and the automatically logged steps of the original field.</p>
+      
+      <pre><code class="language-java">public class RequiredTextField extends TextField {
+
+    protected By errorMessageLocator;
+
+    // Default constructor is required for creating instances using the '@Locator' annotation
+    public RequiredTextField() {
+        super();
+        setUiElementType("required input text field");
+    }
+
+    public RequiredTextField(By rootLocator) {
+        super(rootLocator);
+        // If a custom type name is not provided, the value "input text field" will be used
+        setUiElementType("required input text field");
+    }
+
+    public boolean isErrorMessageShown() {
+        return getRoot().parent().$(".error-message").isDisplayed();
+    }
+
+    @Step("Assert that, the requited field message '{message}' shown")
+    public void assertWarningIsShown(String message) {
+        Assertions.assertThat(isErrorMessageShown()).as("Requited field message").isTrue();
+        Assertions.assertThat(getRoot().parent().$(".error-message").text())
+                  .as("Error Message").isEqualTo(message);
+    }
+}
+</code></pre>
+      
+      <h3 class="section-title">Declaration in the Form Class</h3>
+      <p>When declaring the element, you can set the locator through the constructor or via the <code>@Locator</code> annotation. For example:</p>
+      <pre><code class="language-java">@Name("Login")
+protected RequiredTextField fieldLogin = new RequiredTextField(By.cssSelector("#login"));
+</code></pre>
+      <p>Or with an annotation:</p>
+      <pre><code class="language-java">@Name("Login")
+@Locator(css = "#login")
+protected RequiredTextField fieldLogin;
+</code></pre>
+      
+      <p>The <code>setUiElementType</code> method allows you to override the element type name that will be displayed in the report. If this is not done, the inherited name "input text field" will be used.</p>
+      
+      <p>When calling inherited steps (for example, <code>write</code>, <code>clear</code>, <code>assertCurrentValue</code>), the report logs the steps, while the new custom assert <code>assertWarningIsShown(String message)</code> is logged via the <code>@Step</code> annotation.</p>
+      
+      <h3 class="section-title">Test Scenario</h3>
+      <pre><code class="language-java">@Test
+@DisplayName("Create custom 'Required' text field")
+public void makeNewElementRequitedField() {
+    UiSteps.openBrowser(formPageUrl);
+    formPage.fieldEmail().write("john.doe@gmail.com");
+    formPage.fieldPassword().write("Password12345!");
+    formPage.fieldRank().write("10");
+    formPage.fieldDate().clearAndWrite("11.11.2011");
+    formPage.fieldTelephone().write("199887688");
+    formPage.radioBtnMale().click();
+    formPage.ddExperience().select("2 years");
+    formPage.btnSubmit().click();
+    formPage.fieldLogin().assertWarningIsShown("This field is required.");
+    formPage.fieldLogin().write("John");
+    formPage.btnSubmit().click();
+}
+</code></pre>
+      
+      <p>Run the test, wait, and view the report:</p>
+      <div class="text-center my-3">
+        <img src="img/makeNewElementRequitedField_report.jpg" alt="Report: Required TextField" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">Inheritance from AbstractRequiredTextField</h3>
+      <p>
+        Above, we have considered the most universal method of creating a new element by inheriting from an existing one. 
+        In addition, the framework provides a set of abstract classes that can be considered as templates for creating custom elements 
+        and widgets. Thus, you can create a new element by inheriting from the abstract class AbstractRequiredTextField, 
+        which contains a set of abstract methods and already implements partially or almost entirely all necessary logic. 
+        An example of such an abstract class:</p>
+      <pre><code class="language-java">public abstract class AbstractRequiredTextField extends TextField {
+
+    public AbstractRequiredTextField() {
+        setUiElementType(ElementType.REQUIRED_TEXTFIELD.getType());
+    }
+
+    public abstract boolean isMarked();
+
+    public void assertMarkedAsRequired() {
+        Assertions.assertThat(isMarked()).as("Requited field message").isTrue();
+    }
+
+    public void assertNotMarkedAsRequired() {
+        Assertions.assertThat(isMarked()).as("Requited field message").isFalse();
+    }
+}
+</code></pre>
+      
+      <p>Create a new class <code>ReqTextField</code> that inherits from <code>AbstractRequiredTextField</code>:</p>
+      <pre><code class="language-java">public class ReqTextField extends AbstractRequiredTextField {
+
+    public ReqTextField() {
+        super();
+    }
+
+    public ReqTextField(String selenideLocator) {
+        super(selenideLocator);
+    }
+
+    @Override
+    public boolean isMarked() {
+        return getRoot().parent().$(".error-message").isDisplayed();
+    }
+}
+</code></pre>
+      
+      <p>Now in the test, call the method <code>assertMarkedAsRequired()</code> instead of <code>assertWarningIsShown</code>:</p>
+      <pre><code class="language-java">@Test
+@DisplayName("Create custom 'Required' text field")
+public void makeNewElementRequitedField() {
+    UiSteps.openBrowser(formPageUrl);
+    formPage.fieldEmail().write("john.doe@gmail.com");
+    formPage.fieldPassword().write("Password12345!");
+    formPage.fieldRank().write("10");
+    formPage.fieldDate().clearAndWrite("11.11.2011");
+    formPage.fieldTelephone().write("199887688");
+    formPage.radioBtnMale().click();
+    formPage.ddExperience().select("2 years");
+    formPage.btnSubmit().click();
+    formPage.fieldLogin().assertMarkedAsRequired();
+    formPage.fieldLogin().write("John");
+    formPage.btnSubmit().click();
+}
+</code></pre>
+      
+      <p>This way, you can very simply create a class for a widget or element specific to each project or its part, while all actions are logged in the report in a clear and detailed manner.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../iframeExample/iframeExample.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Working with Elements inside an iframe
+        </a>
+        <a href="./../carouselExample/carouselExample.html" class="btn btn-outline-secondary">
+          Managing the 'Carousel' widget &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

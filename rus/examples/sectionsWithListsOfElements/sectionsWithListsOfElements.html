@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Строим списки виджетов, со списками внутри виджетов</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/sectionsWithListsOfElements/sectionsWithListsOfElements.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Списки виджетов, со списками внутри виджетов</h1>
+      <p class="lead">Пример 6</p>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">      
+      <p>Мы уже рассмотрели, как строить виджеты и списки виджетов, а также как строить пути элементов и виджетов внутри виджетов. Однако периодически встречаются списки виджетов, внутри которых находятся другие списки элементов или более мелких виджетов. Рассмотрим, как это делать на примере аккордеона, но в этот раз внутри каждого блока добавим список из кнопок.</p>
+      
+      <hr/>
+      <iframe width="80%" height="350" src="./../../../examples_pages/list_locator_chain.html"></iframe>
+      <hr/>
+      
+      <h3 class="section-title">Вариант на Selenide</h3>
+      <p><strong>1. Описываем Page Object</strong></p>
+      <pre><code class="language-java">@Getter
+@Accessors(fluent = true)
+public class ListLocatorPage {
+
+    protected ElementsCollection sections = $$("#accordion .card").as("Sections");
+
+    @Step("Select section {sectionTitle}")
+    public void clickSection(String sectionTitle) {
+        SelenideElement target = null;
+        for (SelenideElement section : sections) {
+            if (section.find(".card-header button").text().equals(sectionTitle))
+                section.find(".card-header button").click();
+        }
+    }
+
+    @Step("Select {option} in the section {sectionTitle}")
+    public void selectOption(String sectionTitle, String option) {
+        sections.filter(Condition.text(sectionTitle)).first()
+                .findAll(".card-body .btn")
+                .filter(Condition.text(option)).first().click();
+    }
+
+    @Step("Open context menu {option} in the section {sectionTitle}")
+    public void contextClickOption(String sectionTitle, String option) {
+        sections.filter(Condition.text(sectionTitle)).first()
+                .findAll(".card-body .btn")
+                .filter(Condition.text(option)).first().contextClick();
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Создаём сценарий, в котором будут разворачиваться разные блоки аккордеона и нажиматься кнопки из списка внутри блоков.</strong></p>
+      <pre><code class="language-java">@Test
+@DisplayName("Switching accordion sections and ")
+public void sectionsWithListsOfElements() {
+    Selenide.open(formPageUrl);
+    formPage.leftBarLinks().filter(Condition.text("List locator chain")).first().click();
+    listLocatorPage.clickSection("Section 2");
+    listLocatorPage.selectOption("Section 2", "Option 3");
+    listLocatorPage.clickSection("Section 3");
+    listLocatorPage.selectOption("Section 3", "Option 4");
+    listLocatorPage.selectOption("Section 3", "Option 5");
+    listLocatorPage.clickSection("Section 1");
+    listLocatorPage.selectOption("Section 1", "Option 1");
+    listLocatorPage.selectOption("Section 1", "Option 2");
+    listLocatorPage.contextClickOption("Section 1", "Option 5");
+    listLocatorPage.selectOption("Section 1", "Option 4");
+}
+</code></pre>
+      
+      <p>Смотрим отчёт:</p>
+      <div class="text-center my-3">
+        <img src="img/sectionsWithListsOfElements_selenide.jpg" alt="Отчёт Selenide: Секции со списками элементов" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">Вариант на Allurium</h3>
+      <p><strong>1. Описываем Page Object</strong></p>
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class ListLocatorPage {
+
+    @Name("Sections")
+    @ListLocator(css = "#accordion .card")
+    protected ListWC&lt;Section&gt; sections = new ListWC<>();
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Section extends AbstractWidget {
+
+        @LocatorChain(css = ".card-header button")
+        protected Title sectionTitle;
+
+        @Name("Options")
+        @ListLocatorChain(css = ".card-body .btn") // Или: @ListLocatorChain(xpath="//div[@class='card-body']/button")
+        protected ListWC&lt;Button&gt; listOptions = new ListWC<>();
+
+        public Section(SelenideElement root) {
+            super(root);
+        }
+
+        @Override
+        public String getId() {
+            return sectionTitle.text();
+        }
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Описываем сценарий</strong></p>
+      <pre><code class="language-java">@Test
+@DisplayName("Switching accordion sections and ")
+public void sectionsWithListsOfElements() {
+    UiSteps.openBrowser(formPageUrl);
+    formPage.leftBarLinks().get("List locator chain").click();
+    listLocatorPage.sections().get("Section 2").sectionTitle().click();
+    listLocatorPage.sections().get("Section 2").listOptions().get("3").click();
+    listLocatorPage.sections().get("Section 3").sectionTitle().click();
+    listLocatorPage.sections().get("Section 3").listOptions().get("Option 4").click();
+    listLocatorPage.sections().get("Section 3").listOptions().get("Option 5").click();
+    listLocatorPage.sections().get("Section 1").sectionTitle().click();
+    listLocatorPage.sections().get("Section 1").listOptions().get("Option 1").click();
+    listLocatorPage.sections().get("Section 1").listOptions().get("Option 2").click();
+    listLocatorPage.sections().get("Section 1").listOptions().get("Option 5").contextClick();
+    listLocatorPage.sections().get("Section 1").listOptions().get("Option 4").click();
+}
+</code></pre>
+      
+      <p>Смотрим отчёт:</p>
+      <div class="text-center my-3">
+        <img src="img/sectionsWithListsOfElements_allurium.jpg" alt="Отчёт Allurium: Секции со списками элементов" class="img-fluid">
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../accordionFailedTest/accordionFailedTest.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Пример теста с ошибкой
+        </a>
+        <a href="./../tableExample/tableExample.html" class="btn btn-outline-secondary">
+            Описываем и управляем таблицей с помощью ListWC &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

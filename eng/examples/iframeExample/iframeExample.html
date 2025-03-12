@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Working with Elements inside an iframe</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/iframeExample/iframeExample.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Working with Elements inside an iframe</h1>
+      <p class="lead">Example 10</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">      
+      <p>The framework also includes helper methods for interacting with the browser and its interface. Sometimes you have to deal with finding <code>iframe</code> elements, which is not always a pleasant task. Initially, I wanted to implement an automatic driver switch to the required iframe when accessing an element inside it, but this idea turned out to be unstable and required thorough testing. Therefore, I decided to take another, less convenient but completely stable approach.</p>
+      
+      <p>For working with any <code>iframe</code>, the <code>Iframe</code> class is used – essentially, it can be considered as a widget. However, unlike a simple widget, it must have a root element, i.e. a locator for the specific <code>iframe</code> tag. Therefore, when creating an instance, you must pass a locator or a Selenide element as an argument, similar to widget objects.</p>
+      
+      <p>Let's consider an example. Below is an interactive page with a form and a form inside an iframe tag:</p>
+
+      <hr/>
+      <iframe width="100%" height="500" src="./../../../examples_pages/iframe.html"></iframe>
+      <hr/>
+      
+      <h3 class="section-title">Variant using plain Selenide</h3>
+      
+      <p><strong>1. Describing the Page Object</strong></p>
+      <pre><code class="language-java">@Getter
+@Accessors(fluent = true)
+public class IframePage {
+
+    protected SelenideElement fieldName = $("#name").as("Name field");
+    protected SelenideElement fieldEmail = $("#email").as("Email field");
+    protected SelenideElement fieldPassword = $("#password").as("Password field");
+    protected SelenideElement btnSubmit = $("#submit-main").as("Submit button");
+
+    protected IframeLoginForm iframeLoginForm = new IframeLoginForm();
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class IframeLoginForm {
+        protected SelenideElement fieldName = $("#name_iframe").as("Name field");
+        protected SelenideElement fieldEmail = $("#email_iframe").as("Email field");
+        protected SelenideElement fieldPassword = $("#password_iframe").as("Password field");
+        protected SelenideElement btnSubmit = $("#submit-iframe").as("Submit button");
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Creating the Test Scenario</strong></p>
+      <pre><code class="language-java">@Test
+@DisplayName("Working with elements in an Iframe")
+public void iframeExample() {
+    Selenide.open(iframePageUrl);
+    iframePage.fieldName().sendKeys("John");
+    iframePage.fieldEmail().sendKeys("john.doe@email.com");
+    iframePage.fieldPassword().sendKeys("hardAndLong");
+    WebDriverRunner.getWebDriver().switchTo().frame($("#iframe_root"));
+    iframePage.iframeLoginForm().fieldName().sendKeys("framed-John");
+    iframePage.iframeLoginForm().fieldEmail().sendKeys("framed-doe@email.com");
+    iframePage.iframeLoginForm().fieldPassword().sendKeys("framed_hardAndLong");
+    WebDriverRunner.getWebDriver().switchTo().defaultContent();
+    iframePage.fieldName().clear();
+    iframePage.fieldName().sendKeys("JDoe");
+}
+</code></pre>
+    </br>
+    <h4>View the Report:</h4>
+    <div class="text-center my-3">
+      <img src="img/iframeExample_selenide.jpg" alt="Selenide Report: Iframe" class="img-fluid">
+    </div>
+    
+    <h3 class="section-title">Variant using Allurium</h3>
+    
+    <p><strong>1. Describing the Page Object</strong></p>
+    <pre>
+    <code class="language-java">
+@PageObject
+@Getter
+@Accessors(fluent = true)
+public class IframePage extends Page {
+
+    @Name("Name")
+    protected TextField fieldName = $textField("#name");
+
+    @Name("Email")
+    protected TextField fieldEmail = $textField("#email");
+
+    @Name("Password")
+    protected TextField fieldPassword = $textField("#password");
+
+    @Name("Submit")
+    protected Button btnSubmit = $button("#submit-main");
+
+    @Name("Login form of iframe")
+    protected IframeLoginForm iframeLoginForm = new IframeLoginForm("#iframe_root");
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class IframeLoginForm extends Iframe {
+        public IframeLoginForm(String selenideLocator) {
+            super(selenideLocator);
+        }
+
+        @Name("Name")
+        protected TextField fieldName = $textField("#name_iframe");
+
+        @Name("Email")
+        protected TextField fieldEmail = $textField("#email_iframe");
+
+        @Name("Password")
+        protected TextField fieldPassword = $textField("#password_iframe");
+
+        @Name("Submit")
+        protected Button btnSubmit = $button("#submit-iframe");
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Creating the Test Scenario</strong></p>
+      <pre><code class="language-java">@Test
+@DisplayName("Using 'Iframe' class to easily work with iframe elements")
+public void iframeExample() {
+    UiSteps.openBrowser(iframePageUrl);
+    iframePage.fieldName().write("John");
+    iframePage.fieldEmail().write("john.doe@email.com");
+    iframePage.fieldPassword().write("hardAndLong");
+    iframePage.btnSubmit().click();
+    iframePage.iframeLoginForm().switchDriverToIframe();
+    iframePage.iframeLoginForm().fieldName().write("framed-John");
+    iframePage.iframeLoginForm().fieldEmail().write("framed-doe@email.com");
+    iframePage.iframeLoginForm().fieldPassword().write("framed_hardAndLong");
+    iframePage.iframeLoginForm().switchDriverBack();
+    iframePage.fieldName().clearAndWrite("JDoe");
+}
+</code></pre>
+      
+      <p>Every object inherited from the <code>Iframe</code> class has two additional methods: <code>.switchDriverToIframe()</code> to switch the driver to the given iframe and <code>.switchDriverBack()</code> to return to the main window. The same annotations can be applied to iframes for building relative paths, which makes working with them convenient.</p>
+    </br>
+      <h4>View the Report:</h4>
+      <div class="text-center my-3">
+        <img src="img/iframeExample_allurium.jpg" alt="Allurium Report: Iframe" class="img-fluid">
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../listFiltering/listFiltering.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; List Filtering
+        </a>
+        <a href="./../makeNewElementRequitedField/makeNewElementRequitedField.html" class="btn btn-outline-secondary">
+          Creating Your Own Element &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

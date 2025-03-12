@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Управление виджетами типа 'карусель'</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/carouselExample/carouselExample.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Управление виджетами типа 'карусель'</h1>
+      <p class="lead">Пример 12</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      <p>В прошлом примере мы узнали, что фреймворк содержит абстрактные классы для описания наиболее распространённых элементов. В этом примере рассмотрим, как создать более сложный виджет – карусель (слайдер). Основная суть любой карусели – показывать изображения, зачастую с возможностью их переключения. Для этого существует абстрактный класс <b><code>AbstractCarousel</code></b>.</p>
+      
+      <p>Для наглядности возьмём виджет, описанный на странице <code>carousel.html</code>:</p>
+
+      <hr/>
+      <iframe width="100%" height="550" src="./../../../examples_pages/carousel.html"></iframe>
+      <hr/>
+
+      <p><b>HTML код виджета</b></p>
+      <pre><code class="language-html">&lt;div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"&gt;
+    &lt;ol class="carousel-indicators"&gt;
+        &lt;li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"&gt;&lt;/li&gt;
+        &lt;li data-target="#carouselExampleIndicators" data-slide-to="1"&gt;&lt;/li&gt;
+        &lt;li data-target="#carouselExampleIndicators" data-slide-to="2"&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;div class="carousel-inner"&gt;
+        &lt;div class="carousel-item active"&gt;
+            &lt;img class="d-block w-100" src="https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=1" alt="Third slide"&gt;
+        &lt;/div&gt;
+        &lt;div class="carousel-item"&gt;
+            &lt;img class="d-block w-100" src="https://images.pexels.com/photos/416160/pexels-photo-416160.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="First slide"&gt;
+        &lt;/div&gt;
+        &lt;div class="carousel-item"&gt;
+            &lt;img class="d-block w-100" src="https://images.pexels.com/photos/2194261/pexels-photo-2194261.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600" alt="Second slide"&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"&gt;
+        &lt;span class="carousel-control-prev-icon" aria-hidden="true"&gt;&lt;/span&gt;
+        &lt;span class="sr-only"&gt;Previous&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"&gt;
+        &lt;span class="carousel-control-next-icon" aria-hidden="true"&gt;&lt;/span&gt;
+        &lt;span class="sr-only"&gt;Next&lt;/span&gt;
+    &lt;/a&gt;
+&lt;/div&gt;
+</code>
+</pre>
+    </br>
+      <p>Сам <b>абстрактный класс</b> выглядит следующим образом:</p>
+      <pre><code class="language-java">@Widget
+public abstract class AbstractCarousel extends AbstractWidget {
+    public AbstractCarousel() {
+        this.setUiElementType(ElementType.CAROUSEL.getType());
+    }
+
+    public AbstractCarousel(By rootLocator) {
+        super(rootLocator);
+        this.setUiElementType(ElementType.CAROUSEL.getType());
+    }
+
+    public AbstractCarousel(String selenideRootLocator) {
+        super(selenideRootLocator);
+        this.setUiElementType(ElementType.CAROUSEL.getType());
+    }
+
+    public AbstractCarousel(SelenideElement selenideRootElement) {
+        super(selenideRootElement);
+        this.setUiElementType(ElementType.CAROUSEL.getType());
+    }
+
+    public abstract void scrollForward();
+
+    public abstract void scrollBackward();
+}
+</code>
+</pre>
+    </br>
+      <p><b>Опишем наш собственный виджет</b>, создав класс <b><code>Carousel</code></b> и отнаследовавшись от класса <b><code>AbstractWidget</code></b>:</p>
+      <p>Нам потребуется переопределить 2 абстрактных метода <b><code>scrollForward()</code></b> и <b><code>scrollBackward()</code></b></p>
+      <pre><code class="language-java">@Widget
+public class Carousel extends AbstractCarousel {
+
+    public Carousel(String selenideLocator) {
+        super(selenideLocator);
+    }
+
+    @Override
+    public void scrollForward() {
+        getRoot().$(".carousel-control-next-icon").click();
+        UiSteps.waiting(1, "observing the slide");
+    }
+
+    @Override
+    public void scrollBackward() {
+        getRoot().$(".carousel-control-prev-icon").click();
+        UiSteps.waiting(1, "observing the slide");
+    }
+}
+</code>
+</pre>
+    </br>      
+      <p>Объявим его на странице:</p>
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class CarouselPage extends Page {
+
+    @Name("Random images")
+    protected Carousel carousel = new Carousel("#carouselExampleIndicators");
+}
+</code>
+</pre>
+    </br> 
+      <p>И напишем сценарий:</p>
+      <pre><code class="language-java">@Test
+@DisplayName("Simple carouser example")
+public void carouselExample() {
+    UiSteps.openBrowser(carouselPageUrl);
+    carouselPage.carousel().scrollForward();
+    carouselPage.carousel().scrollBackward();
+    carouselPage.carousel().scrollForward();
+    carouselPage.carousel().scrollForward();
+    carouselPage.carousel().scrollBackward();
+}
+</code>
+</pre>
+    </br> 
+      <p>Запускаем тест, смотрим, как проходит выполнение, и анализируем отчёт. В репорте автоматически составились шаги с подстановкой имени и типа элемента.</p>
+      
+      <div class="text-center my-3">
+        <img src="img/carouselExample_report.jpg" alt="Отчёт" class="img-fluid">
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../makeNewElementRequitedField/makeNewElementRequitedField.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Создание своего элемента
+        </a>
+        <a href="./../switchExample/switchExample.html" class="btn btn-outline-secondary">
+            Управление переключателями &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

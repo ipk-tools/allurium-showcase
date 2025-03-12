@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Пример 3: Переходы по выпадающему меню навигации</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/multiLevelMenuNavigation/multiLevelMenuNavigation.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Переходы по выпадающему меню навигации</h1>
+      <p class="lead">Пример 3</p>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      <p>Теперь давайте рассмотрим, как можно реализовать переходы по меню навигации с несколькими выпадающими саб-меню. На этом примере мы разберём, как работать с группами элементов, объединёнными в виджеты.</p>
+      <p>Нам понадобится описать меню навигации, располагающееся вверху страницы, и поместить его в уже созданный PageObject <code>FormPage</code>.</p>
+
+      <div class="text-center my-3">
+        <img src="img/multiLevelMenuNavigation.jpg" alt="Переходы по выпадающему меню навигации">
+      </div>
+
+      <p>Работающая навигация в Iframe ниже</p>
+      <hr/>
+      <iframe width="100%" height="300" src="./../../../examples_pages/menu.html"></iframe>
+      <hr/>
+      
+      <p>В примере с формой мы рассматривали простейшие элементы (поля и кнопки) и методы взаимодействия с ними. Однако практически все страницы современных приложений состоят из динамических групп элементов, которые можно квалифицировать как виджеты.</p>
+      
+      <h3 class="section-title">Вариант на Selenide</h3>
+      <p><strong>1. Описываем панель меню навигации в классе <code>TopBar</code>:</strong></p>
+      <pre><code class="language-java">@Getter
+@Accessors(fluent = true)
+public class TopBar {
+
+    protected SelenideElement mainItem1 = $x("//ul[@class='menu']/li[1]").as("Main Item 1");
+    protected SelenideElement mainItem2 = $x("//ul[@class='menu']/li[2]").as("Main Item 2");
+    protected SelenideElement mainItem3 = $x("//ul[@class='menu']/li[3]").as("Main Item 3");
+    protected SelenideElement mainItem4 = $x("//ul[@class='menu']/li[4]").as("Main Item 4");
+    protected Level1SubMenu level1SubMenu = new Level1SubMenu();
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level1SubMenu {
+        ElementsCollection items = $$x("//ul[@class='menu']/li[4]/ul/li")
+                .as("Level 1 sub menu items");
+        Level2SubMenu level2SubMenu = new Level2SubMenu();
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level2SubMenu {
+        ElementsCollection items = $$x("//ul[@class='menu']/li[4]/ul/li[3]/ul/li")
+                .as("Level 2 sub menu items");
+        Level3SubMenu level3SubMenu = new Level3SubMenu();
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level3SubMenu {
+        ElementsCollection items = $$x("//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li")
+                .as("Level 3 sub menu items");
+        Level4SubMenu level4SubMenu = new Level4SubMenu();
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level4SubMenu {
+        ElementsCollection items = $$x("//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li")
+                .as("Level 4 sub menu items");
+        Level5SubMenu level5SubMenu = new Level5SubMenu();
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level5SubMenu {
+        ElementsCollection items = $$x("//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li")
+                .as("Level 5 sub menu items");
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Создаём экземпляр в Page Object:</strong></p>
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class FormPage extends Page {
+
+    protected TopBar topBar = new TopBar();
+    protected SelenideElement fieldLogin = $("#login").as("Login");
+    protected SelenideElement fieldEmail = $("#email").as("Email");
+    protected SelenideElement fieldPassword = $("#password").as("Password");
+    protected SelenideElement fieldRank = $("#rank").as("protected");
+    protected SelenideElement fieldDate = $x("//input[@id='date']").as("Date");
+    protected SelenideElement fieldTelephone = $("#tel").as("Telephone");
+    protected SelenideElement uploadAvatar = $("#file").as("Avatar");
+    protected SelenideElement radioBtnMale = $("#male").as("Gender Male");
+    protected SelenideElement ckbMorning = $("#checkbox1").as("Preferable time - Morning");
+    protected SelenideElement ckbEvening = $("#checkbox2").as("Preferable time - Evening");
+    protected SelenideElement ddExperience = $("#experience").as("Experience");
+    protected SelenideElement selectWorkingDays = $("#multiple-select").as("Working Days");
+    protected SelenideElement btnReset = $(".btn-secondary").as("Reset");
+    protected SelenideElement btnSubmit = $(".btn-primary").as("Submit");
+}
+</code></pre>
+      
+      <p><strong>3. Пишем тестовый сценарий:</strong></p>
+      <pre><code class="language-java">@Test
+@Feature("Multilevel top menu")
+@DisplayName("User explores top multilevel menu")
+public void multiLevelMenuNavigation() {
+    Selenide.open(formPageUrl);
+    formPage.topBar().mainItem4().hover();
+    formPage.topBar().level1SubMenu().items().filter(Condition.text("Level 1 Item 3")).first().hover();
+    formPage.topBar().level1SubMenu().level2SubMenu().items().filter(Condition.text("Level 2 Item 3")).first().hover();
+    formPage.topBar()
+            .level1SubMenu()
+            .level2SubMenu()
+            .level3SubMenu()
+            .items().filter(Condition.text("Level 3 Item 3")).first().hover();
+    formPage.topBar()
+            .level1SubMenu()
+            .level2SubMenu()
+            .level3SubMenu()
+            .level4SubMenu()
+            .items().filter(Condition.text("Level 4 Item 3")).first().hover();
+    formPage.topBar()
+            .level1SubMenu()
+            .level2SubMenu()
+            .level3SubMenu()
+            .level4SubMenu()
+            .level5SubMenu()
+            .items().filter(Condition.text("Level 5 Item 3")).first().hover();
+}
+</code></pre>
+      
+      <p>Неочень красиво, но терпимо. Смотрим отчёт Allure:</p>
+      <div class="text-center my-3">
+        <img src="img/multiLevelMenuNavigation_selenide.jpg" alt="Отчёт Selenide: Multilevel Menu" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">Вариант на Allurium</h3>
+      <p>Теперь сделаем то же самое с Allurium.</p>
+      
+      <p><strong>1. Описываем класс панели <code>TopBar</code>:</strong></p>
+      <pre><code class="language-java">@Widget
+@Getter
+@Accessors(fluent = true)
+public class TopBar extends AbstractWidget {
+
+    @Name("Main Item 1")
+    @Locator(xpath = "//ul[@class='menu']/li[1]")
+    protected MenuItem mainItem1;
+
+    @Name("Main Item 2")
+    @Locator(xpath = "//ul[@class='menu']/li[2]")
+    protected MenuItem mainItem2;
+
+    @Name("Main Item 3")
+    protected MenuItem mainItem3 = MenuItem.$menuItem("//ul[@class='menu']/li[3]");
+
+    @Name("Main Item 4")
+    protected MenuItem mainItem4 = _$menuItem("//ul[@class='menu']/li[4]");
+
+    @Name("Level 1 sub menu")
+    protected Level1SubMenu level1SubMenu = new Level1SubMenu();
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level1SubMenu extends AbstractWidget {
+
+        @Name("Level 1 sub menu items")
+        @ListLocator(xpath = "//ul[@class='menu']/li[4]/ul/li")
+        protected ListWC<MenuItem> items = new ListWC<>();
+
+        @Name("Level 2 sub menu")
+        protected Level2SubMenu level2SubMenu = new Level2SubMenu();
+    }
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level2SubMenu extends AbstractWidget {
+
+        @Name("Level 2 sub menu items")
+        @ListLocator(xpath = "//ul[@class='menu']/li[4]/ul/li[3]/ul/li")
+        protected ListWC<MenuItem> items = new ListWC<>();
+
+        @Name("Level 3 sub menu")
+        protected Level3SubMenu level3SubMenu = new Level3SubMenu();
+    }
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level3SubMenu extends AbstractWidget {
+
+        @Name("Level 3 sub menu items")
+        @ListLocator(xpath = "//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li")
+        protected ListWC<MenuItem> items = new ListWC<>();
+
+        @Name("Level 4 sub menu")
+        protected Level4SubMenu level4SubMenu = new Level4SubMenu();
+    }
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level4SubMenu extends AbstractWidget {
+
+        @Name("Level 4 sub menu items")
+        @ListLocator(xpath = "//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li")
+        protected ListWC<MenuItem> items = new ListWC<>();
+
+        @Name("Level 5 sub menu")
+        protected Level5SubMenu level5SubMenu = new Level5SubMenu();
+    }
+
+    @Widget
+    @Getter
+    @Accessors(fluent = true)
+    public static class Level5SubMenu extends AbstractWidget {
+
+        @Name("Level 5 sub menu items")
+        @ListLocator(xpath = "//ul[@class='menu']/li[4]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li[3]/ul/li")
+        protected ListWC<MenuItem> items = new ListWC<>();
+    }
+}
+</code></pre>
+      
+      <p><strong>2. Создаём экземпляр в Page Object:</strong></p>
+      <pre><code class="language-java">@PageObject
+@Getter
+@Accessors(fluent = true)
+public class FormPage extends Page {
+
+    <b>@Name("Top Bar")
+    protected TopBar topBar = new TopBar();</b>
+
+    @Name("Login")
+    @Locator(css = "#login")
+    protected TextField fieldLogin;
+
+    @Name("Email")
+    @Locator(css = "#email")
+    protected TextField fieldEmail;
+
+    @Name("Password")
+    @Locator(css = "#password")
+    protected TextField fieldPassword;
+
+    @Name("Rank")
+    protected TextField fieldRank = $textField("#rank");
+
+    // ... остальные поля ...
+}
+</code></pre>
+      
+      <p><strong>3. Пишем тестовый сценарий для Allurium:</strong></p>
+      <pre><code class="language-java">@Test
+@Feature("Multilevel top menu")
+@DisplayName("User explores top multilevel menu")
+public void multiLevelMenuNavigation() {
+    UiSteps.openBrowser(formPageUrl);
+    formPage.topBar().mainItem4().hover();
+    formPage.topBar().level1SubMenu().items().get("Level 1 Item 3").hover();
+    formPage.topBar().level1SubMenu().level2SubMenu().items().get("Level 2 Item 3").hover();
+    formPage.topBar().level1SubMenu().level2SubMenu().level3SubMenu().items().get("Level 3 Item 3").hover();
+    formPage.topBar().level1SubMenu().level2SubMenu().level3SubMenu().level4SubMenu().items().get("Level 4 Item 3").hover();
+    formPage.topBar().level1SubMenu().level2SubMenu().level3SubMenu().level4SubMenu().level5SubMenu().items().get("Level 5 Item 3").click();
+}
+</code></pre>
+      
+      <p><b>Смотрим отчёт Allure:</b></p>
+      <div class="text-center my-3">
+        <img src="img/multiLevelMenuNavigation_allurium.jpg" alt="Отчёт Allurium: Multilevel Menu" class="img-fluid">
+      </div>
+      
+      <p>Здесь мы сразу получили хорошо читаемый структурированный репорт с описанием каждого элемента и действия с ним.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../fillListOfSimpleInputElements/fillListOfSimpleInputElements.html" class="btn btn-outline-secondary">&laquo;&nbsp; Списки простых элементов, поиск и использование</a>
+        <a href="./../accordionPassedTest/accordionPassedTest.html" class="btn btn-outline-secondary">Список виджетов, поиск и использование &nbsp;&raquo;</a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+        <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

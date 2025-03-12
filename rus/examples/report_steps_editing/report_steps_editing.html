@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Кастомизация шагов</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+      display: block;
+      white-space: pre-wrap;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Быстрый старт</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+              </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../eng/examples/report_steps_editing/report_steps_editing.html">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Кастомизация шагов</h1>
+      <p class="lead">Изменение шаблонов шагов</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">      
+      <p>В Allurium шаги тестов логируются в отчёт автоматически, но если необходимо изменить их описание, это можно сделать с помощью файла <code>allurium-steps.yml</code></p>
+      
+      <p>Например, изменим описание шага <code>assertVisible</code> в репортах на английском языке. Это один из самых часто используемых ассертов, присутствующий у любого элемента.</p>
+      
+      <p>Находим соответствующую запись в файле <code>allurium-steps.yml</code>:</p>
+      
+      <pre><code class="language-yaml">
+assert_visible:
+  1: "Assert that the {name} {element} is visible"
+  2: "Assert that the {name} {element} of {parent} is visible"
+      </code></pre>
+      
+      <p>Где:</p>
+      <ul>
+        <li><code>{name}</code> — имя элемента, подставляемое из аннотации <code>@Name</code></li>
+        <li><code>{element}</code> — тип элемента или виджета.</li>
+        <li><code>{parent}</code> — имя родительского виджета, если элемент находится внутри другого виджета.</li>
+      </ul>
+      
+      <p>Изменим шаблон:</p>
+      
+      <pre><code class="language-yaml">
+assert_visible:
+  1: "Lets check that the {name} {element} is really visible"
+  2: "Lets check that the {name} {element} of {parent} is really visible"
+      </code></pre>
+      
+      <p>Добавим в тест <code>fillTheForm</code> вызов <code>assertVisible</code></p>
+      
+      <pre><code class="language-java">
+@Test
+@Feature("Form")
+@DisplayName("Filling the example form")
+public void fillTheForm() {
+    // .. existing code
+
+    formPage.fieldLogin().assertVisible();
+    formPage.fieldLogin().write("John");
+
+    // the rest of the code...
+}
+      </code></pre>
+      
+      <p>Запускаем тест и смотрим отчёт:</p>
+      
+      <div class="text-center my-3">
+        <img src="img/allurium_report.jpg" alt="Отчёт с изменённым шагом" class="img-fluid">
+      </div>
+      
+      <h3 class="section-title">Другие доступные переменные</h3>
+      
+      <p>В файле <code>allurium-steps.yml</code> помимо рассмотренных переменных <code>{name}</code> <code>{element}</code> <code>{parent}</code> есть и другие.</p>
+      
+      <p>Пример шага <code>assert_has_css_class</code></p>
+      
+      <pre><code class="language-yaml">
+assert_has_css_class:
+  1: "Assert that the {name} {element} has the CSS class {clazz}"
+  2: "Assert that the {name} {element} of {parent} has the CSS class {clazz}"
+      </code></pre>
+      
+      <p>Где <code>{clazz}</code> — CSS-класс элемента.</p>
+      
+      <p>Используется так:</p>
+      
+      <pre><code class="language-java">
+formPage.fieldLogin().assertHasCssClass("form-control");
+      </code></pre>
+      
+      <p>Другой распространённый пример — работа с текстом, обозначается - {text} :</p>
+      
+      <pre><code class="language-yaml">
+write:
+  1: "Write \"{text}\" to the {name} {element}"
+  2: "Write \"{text}\" to the {name} {element} of {parent}"
+      </code></pre>
+      
+      <p>Этот шаблон используется при вводе текста:</p>
+      
+      <pre><code class="language-java">
+formPage.fieldLogin().write("John");
+      </code></pre>
+      
+      <p>Остальные переменные в шаблонах должны быть интуитивно понятны.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../changing_names_wrapping_in_reports/changing_names_wrapping_in_reports.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Редактирование оформления названий элементов в отчёте
+        </a>
+        <a href="./../steps_detailing_level/steps_detailing_level.html" class="btn btn-outline-secondary">
+            Изменение детализации шагов  &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - распространяется под лицензией MIT</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f"
+          crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Managing Switches</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/switchExample/switchExample.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Managing Switches</h1>
+      <p class="lead">Example 13</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      <p>Another fairly popular set of entities are various switchers. Let's consider a couple of different switchers shown below:</p>
+
+      <hr/>
+      <iframe width="80%" height="350" src="./../../../examples_pages/switcher_page.html"></iframe>
+      <hr/>
+
+      <p>Let's look at their HTML code:</p>
+      <pre><code class="language-html">&lt;!-- Switcher 1: Classic Toggle Switch --&gt;
+&lt;div class="mb-4"&gt;
+    &lt;h5&gt;Classic Toggle Switch&lt;/h5&gt;
+    &lt;label class="switch"&gt;
+        &lt;input type="checkbox"&gt;
+        &lt;span class="slider round"&gt;&lt;/span&gt;
+    &lt;/label&gt;
+&lt;/div&gt;
+
+&lt;!-- Switcher 2: Button Toggle --&gt;
+&lt;div class="mb-4"&gt;
+    &lt;h5&gt;Button Toggle&lt;/h5&gt;
+    &lt;button id="toggleBtn" class="toggle-btn off"&gt;Off&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+      
+      <p>Since the switchers are different – the first is a classic toggle switch, and the second is a button that changes color and text – it is not possible to describe them with a single class.</p>
+      <p>However, as in the previous example with the carousel, we have an abstract class <b><code>AbstractSwitcher</code></b> which makes it easy to describe switchers of any type.</p>
+      <p>We will create a separate class for each switcher and override 4 main abstract methods:</p>
+      <ul>
+        <li><code>getState()</code></li>
+        <li><code>toggle()</code></li>
+        <li><code>switchOn()</code></li>
+        <li><code>switchOff()</code></li>
+      </ul>
+      <p>This way, each will use its own logic but have one interface through which the framework reads actions and builds the report.</p>
+      
+      <h3 class="section-title">Class - ClassicToggleSwitcher</h3>
+      <pre>
+        <code class="language-java">
+public class ClassicToggleSwitcher extends AbstractSwitcher {   
+    public ClassicToggleSwitcher(String selenideLocator) {
+        super(selenideLocator);
+    }
+
+    @Override
+    public boolean getState() {
+        return getRoot().$("input").isSelected();
+    }
+
+    @Override
+    public void toggle() {
+        getRoot().click();
+    }
+
+    @Override
+    public void switchOn() {
+        if (!getState()) {
+            getRoot().click();
+        }
+    }
+
+    @Override
+    public void switchOff() {
+        if (getState()) {
+            getRoot().click();
+        }
+    }
+}
+</code></pre>
+      
+      <h3 class="section-title">Class - ButtonToggle</h3>
+      <pre>
+<code class="language-java">
+public class ButtonToggle extends AbstractSwitcher {
+    public ButtonToggle(String selenideLocator) {
+        super(selenideLocator);
+    }
+
+    @Override
+    public boolean getState() {
+        return getRoot().has(Condition.cssClass("off"));
+    }
+
+    @Override
+    public void toggle() {
+        getRoot().click();
+    }
+
+    @Override
+    public void switchOn() {
+        if (getState()) {
+            getRoot().click();
+        }
+    }
+
+    @Override
+    public void switchOff() {
+        if (!getState()) {
+            getRoot().click();
+        }
+    }
+}
+</code></pre>
+      
+      <h3 class="section-title">Adding Switchers to the Page Object</h3>
+      <pre><code class="language-java">
+@PageObject
+@Getter
+@Accessors(fluent = true)
+public class SwitcherPage {
+    
+    @Name("CTU")
+    protected ClassicToggleSwitcher classicToggleSwitcher = new ClassicToggleSwitcher(".switch");
+    
+    @Name("SBT")
+    protected ButtonToggle buttonToggle = new ButtonToggle("#toggleBtn");
+}
+</code></pre>
+      
+      <h3 class="section-title">Test Scenario</h3>
+      <pre><code class="language-java">
+@Test
+@DisplayName("Switcher (Toggle) example")
+public void switcherExample() {
+    UiSteps.openBrowser(switcherPageUrl);
+    carouselPage.classicToggleSwitcher().switchOn();
+    carouselPage.classicToggleSwitcher().switchOff();
+    carouselPage.classicToggleSwitcher().toggle();
+    carouselPage.classicToggleSwitcher().switchOff();
+    carouselPage.buttonToggle().switchOn();
+    carouselPage.buttonToggle().switchOff();
+    carouselPage.buttonToggle().toggle();
+    carouselPage.buttonToggle().switchOff();
+}
+</code></pre>
+      
+      <p>Run the test and check the report – all steps used are recorded in the report with the corresponding names and types.</p>
+
+      <div class="text-center">
+        <img src="img/switcher_success.jpg" alt="Report of a successful switcher" class="img-fluid">
+      </div>
+
+      <p>The report displays the element type simply as "switcher" (since we did not override the name via the <code>setUiElementType</code> method).</p>
+      <p>You can change this if desired by adding <code>setUiElementType('custom type')</code> in the constructor.</p>
+      <p>For example, like this:</p>
+      <pre><code class="language-java">
+public ClassicToggleSwitcher(String selenideLocator) {
+    super(selenideLocator);
+    setUiElementType("custom switcher type");
+}
+</code></pre>
+
+      <br/>
+      <p>Finally, let's see what the report shows <b>if an error is made</b>. For example, assign an incorrect locator to an element:</p>
+      <pre><code class="language-java">
+@Name("SBT")
+protected ButtonToggle buttonToggle = new ButtonToggle("#ttoggleBtn");
+</code></pre>
+      <br/>
+      <p>Run the test, and the report will show the expected error at the step where the element is called.</p>
+      
+      <div class="text-center">
+        <img src="img/switcher_fail.jpg" alt="Report of a switcher error" class="img-fluid">
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../carouselExample/carouselExample.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Managing 'Carousel' Widgets
+        </a>
+        <a href="./../ui_steps/ui_steps.html" class="btn btn-outline-secondary">
+          General UI Steps &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f"
+          crossorigin="anonymous"></script>
+</body>
+</html>

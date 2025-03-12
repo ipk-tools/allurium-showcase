@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Configuration Parameters</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+      display: block;
+      white-space: pre-wrap;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+              </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/properties/properties.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Configuration Parameters</h1>
+      <p class="lead">Guide</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">      
+      <p>Before moving on to the next examples, let's consider how to set some configuration parameters.</p>
+      
+      <p>In the framework source files at 
+        <a href="https://github.com/ipk-tools/Allurium/blob/1.0.1/src/main/resources/allurium-default.properties" target="_blank">
+          allurium-default.properties
+        </a>
+        there is the file <code>allurium-default.properties</code>.
+      </p>
+      
+      <p>At the time of writing, it contains the following default parameters:</p>
+      <pre><code class="language-properties">
+localization=en
+step.detailing=2
+highlighter.start=[
+highlighter.end=]
+page.load.strategy=normal
+page.load.timeout=30000
+retry.amount=10
+retry.interval.ms=1000
+      </code></pre>
+      
+      <p>Let's start by considering 4 of them:</p>
+      <ul>
+        <li><code>page.load.strategy</code></li>
+        <li><code>page.load.timeout</code></li>
+        <li><code>retry.amount</code></li>
+        <li><code>retry.interval.ms</code></li>
+      </ul>
+      
+      <p>Assigning values:</p>
+      <pre><code class="language-properties">
+page.load.strategy=normal
+page.load.timeout=30000
+      </code></pre>
+      
+      <p>is equivalent to calling in the code during test initialization:</p>
+      <pre><code class="language-java">
+Configuration.pageLoadStrategy = "normal"
+Configuration.pageLoadTimeout = 30000
+      </code></pre>
+      
+      <p>If you directly specify these values in your test code, they will take precedence and override the default values.</p>
+      
+      <p>Next, the values:</p>
+      <pre><code class="language-properties">
+retry.amount=10
+retry.interval.ms=1000
+      </code></pre>
+      
+      <p>This is a way to tell the framework the principle by which most of the waits, elements, values, and parameters are built. For example, if you need to find an element in a list, when calling the method <code>employeesList.get("Robert")</code> it will perform 10 attempts with an interval of 1 second between each.</p>
+      
+      <p>In the context of Selenide waits, this is equivalent to the code:</p>
+      <pre><code class="language-java">
+Configuration.timeout = retryAmount * retryIntervalMs;
+      </code></pre>
+      
+      <p>Thus, Selenide waits and other waits constructed in the framework will be consistent. If you set your own value for <code>Configuration.timeout</code> in the code, it will override the value from the file, while <code>retry.amount</code> and <code>retry.interval.ms</code> will retain their values. This can lead to desynchronization between the waits, so it is recommended to set values through the file.</p>
+      
+      <p>The remaining parameters will be discussed in later examples, but first, let's cover how to use the <code>properties</code> file.</p>
+      
+      <p>As mentioned in the "Quick Start" description, it is enough to simply include the dependency in your <code>pom.xml</code> or <code>build.gradle</code> — and everything will work immediately. But you can also include your own <code>allurium.properties</code> file in the project, which will override the built-in <code>allurium-default.properties</code> file from the library.</p>
+      
+      <p>To do this, you can download a sample from here: <a href="https://github.com/ipk-tools/allurium-showcase/blob/1.0.1/src/main/resources/allurium.properties" target="_blank">allurium.properties</a></p>
+      
+      <p>The file name must be exactly <code>allurium.properties</code> and it should be placed in the directory <code>{your_project}/src/main/resources</code>.</p>
+      
+      <p>If the <code>allurium.properties</code> file exists, the framework will use the values from this file, and no additional configuration is needed.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../browser_steps/browser_steps.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Browser Actions
+        </a>
+        <a href="./../changing_names_wrapping_in_reports/changing_names_wrapping_in_reports.html" class="btn btn-outline-secondary">
+            Editing Element Names in the Report &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f"
+          crossorigin="anonymous"></script>
+</body>
+</html>

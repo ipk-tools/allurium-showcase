@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - List Filtering</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .nav-links a {
+      margin: 0 1rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="./../../index.html">Allurium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./../../quick_start.html">Quick Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../introduction.html">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../java_doc.html">Javadoc</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Eng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./../../../rus/examples/listFiltering/listFiltering.html">Rus</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section id="home" class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">List Filtering</h1>
+      <p class="lead">Example 9</p>
+    </div>
+  </section>
+  
+  <!-- Main Content Section -->
+  <section id="examples" class="py-5">
+    <div class="container">
+      <p>Although the <code>get("id")</code> method in most cases eliminates the need for filtering, there are situations when it is required to sort list elements by a specific attribute — for example, by the presence of a certain CSS class on the element. For such cases, filtering must be applied.</p>
+      
+      <p>In one of the previous examples, where we clicked on buttons in a list, instead of obtaining a button by its <code>"id"</code>, you can, as in pure Selenide, apply filtering:</p>
+      
+      <pre><code class="language-java">@Test
+@Feature("Simple elements list")
+@DisplayName("Walk through the lists of simple elements")
+public void fillListOfSimpleInputElements() {
+    ...
+    simpleListsPage.listBirdNameButtons().get("Sparrow").click();                            // this way we chose a button by "id"
+    simpleListsPage.listBirdNameButtons().filter(Condition.text("Sparrow")).get(0).click();  // this way we found it via filtering
+}
+</code></pre>
+      
+      <p>The result of these steps will appear identical in the report.</p>
+      
+      <p>But what if you take a more complex case, for example like this:</p>
+      
+      <pre><code class="language-java">accordionPage.accordionSections().filter(Condition.cssClass("card")).assertSize(5);
+</code></pre>
+      
+      <p>When the <code>assertSize(5)</code> method is called on the list object, an event is intercepted and a step is recorded in the report indicating that the list's size has been checked to be 5. However, in this case, there is a sub-step of filtering in the call chain that changes the nature of the check, which the <code>assertSize</code> method is unaware of.</p>
+      
+      <p>Thus, one might expect the report to show a standard entry, for example:</p>
+      
+      <pre><code class="language-java">Assert that the &lt;Accordion categories&gt; list's size is 5
+</code></pre>
+      
+      <p>To prevent this, the filtering method returns a clone of the current list that retains all its attributes, but contains only the filtered entries along with a marker that filtering was applied. After that, when any assertion is called, the framework will know that the list was filtered and will log an entry in the report such as:</p>
+      
+      <pre><code class="language-java">Assert that the &lt;Accordion categories, filtered by: css class "card"&gt; list's size is 5
+</code></pre>
+      
+      <p>After the list name <code>Accordion categories</code>, records of all applied filters are appended.</p>
+      
+      <p>Let's see a few more examples with filtering:</p>
+      
+      <pre><code class="language-java">@Test
+@DisplayName("Filtration examples")
+public void listFiltering() {
+    UiSteps.openBrowser(accordionPageUrl);
+    AccordionPage.AccordionSection accordionSection = accordionPage.accordionSections()
+                                                            .filter(Condition.text("Chapter 2")).get(0);
+    accordionSection.title().click();
+    accordionPage.accordionSections().filter(Condition.visible).assertSize(5);
+    accordionPage.accordionSections().filter(Condition.cssClass("card")).assertSize(5);
+    accordionPage.accordionSections().filter(Condition.name("some")).assertSize(0);
+    accordionPage.accordionSections()
+            .filter(Condition.visible)
+            .filter(Condition.cssClass("card"))
+            .filter(Condition.text("Chapter 2"))
+            .assertSize(1);
+}
+</code></pre>
+      
+      <div class="text-center">
+        <img src="img/filtration_report.jpg" alt="Filtration report" class="img-fluid">
+      </div>
+      
+      <p>Thus, the filtering capabilities are in no way limited, while remaining easy to read.</p>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links text-center mt-5">
+        <a href="./../dynamicTable/dynamicTable.html" class="btn btn-outline-secondary">
+          &laquo;&nbsp; Dynamic Table Management using ListWC
+        </a>
+        <a href="./../iframeExample/iframeExample.html" class="btn btn-outline-secondary">
+            Working with elements inside an iframe &nbsp;&raquo;
+        </a>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

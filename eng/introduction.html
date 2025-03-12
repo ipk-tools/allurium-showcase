@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allurium - Java Testing Framework</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+      body {
+        line-height: 1.6;
+      }
+      pre {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        overflow-x: auto;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-size: 0.95em;
+      }
+      .section-title {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+      iframe {
+        width: 100%;
+        height: 800px;
+        border: none;
+      }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container">
+            <a class="navbar-brand" href="index.html">Allurium</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="quick_start.html">Quick Start</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="introduction.html">Intro</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="faq.html">FAQ</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="java_doc.html">Javadoc</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://github.com/ipk-tools/Allurium" target="_blank" rel="noopener noreferrer">Github</a>
+                </li>
+              </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Eng</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./../rus/introduction.html">Rus</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Introduction</h1>
+            <p class="lead">Java testing framework for streamlined and efficient test creation.</p>
+        </div>
+    </section>
+
+    <!-- Main Content Section -->
+    <section id="introduction" class="py-5">
+      <div class="container">
+      
+        <p>
+          In this article, I would like to share a tool that I gradually developed and improved in my spare time, which I applied to simplify the tasks I worked on at various companies during that period.
+        </p>
+        
+        <h5>Work in Test Automation</h5>
+        <p>
+          Working in test automation became my official profession several years ago. During this time, I had the opportunity to engage in a wide range of tasks, depending on the companies I worked for. Starting from testing user interfaces of various websites, web and mobile applications, my responsibilities eventually led me deep into testing complex API services and even automating desktop applications.
+        </p>
+        
+        <p>
+          In the first years, I was heavily involved in testing web applications on Java, although I did not start with it. Of course, after trying many approaches, I found my favorite stack which I used when given a choice. For me, it turned out to be TestNG + Selenium + Allure. Naturally, I also had to work with the famous <em>Cucumber</em>, and later with the monstrous (in my opinion) <em>Serenity</em> and many other solutions, including custom developments by various people.
+        </p>
+        
+        <h5>Abandoning BDD and the Complexities of Auto-Logging</h5>
+        <p>
+          I was never inclined towards BDD, as I mostly read reports and reviewed tests myself, and in 100% of cases, I composed the scenarios using Gherkin (sometimes based on provided scenarios, more often not). The so-called convenience that BDD offers the user was minimal, while in return it demanded a lot — skyscrapers of wrapper classes, complications with inheritance, the need to create a bunch of duplicates for trivial actions, absolute inconvenience in transferring data between steps and processes, and other difficulties.
+        </p>
+        
+        <h5>The Emergence of Selenide and Step Auto-Logging</h5>
+        <p>
+          Then came Selenide, which made the abandonment of BDD frameworks even more justified (although not immediately and not without reservations). Nevertheless, I generally liked BDD reports – they were almost always more informative and easier to read than the reports generated through <code>@Step</code> annotations in Allure, and much more legible than the built-in auto-logging of Allure.
+        </p>
+        
+        <p>
+          If one wanted to make the report more informative and intuitive without using BDD approaches and frameworks, it would be necessary, as in BDD, to wrap every minimal action in a step wrapper. For example:
+        </p>
+        
+        <pre><code class="language-java">public class FormPage {
+    SelenideElement btnSave = $(".btn-primary").as("Save");
+}</code></pre>
+        
+        <p>
+          This method would provide a basic auto-generated log for the event <code>btnSave.click();</code> – something like "Step1: Click Save".
+        </p>
+        
+        <h5>The Problem with Wrappers in Complex Scenarios</h5>
+        <p>
+          Of course, one might say that any scenario consists of a sequence of simple actions. Maybe in an ideal world, that would be the case, but if you try to write a test for a CRM containing dozens of tables, numerous widgets in each record, complex filters, search queries, uploads, data imports, dynamic events, and so on – the final test might consist of 50–60 lines, where each line is a fairly complex step. After that, looking at the auto-generated report, arguing about its "readability" would be extremely difficult.
+        </p>
+        
+        <p>
+          However, if I want to see a proper description of a step in the report, for example:
+        </p>
+        
+        <pre><code class="language-java">"Click on the &lt;Save&gt; button of the &lt;User settings dialog&gt;"</code></pre>
+        
+        <p>
+          then you would have to write a wrapper:
+        </p>
+        
+        <pre><code class="language-java">@Step("Click on the &lt;Save&gt; button of the &lt;User settings dialog&gt;")
+public void clickBtnSave() {
+    btnSave.click();
+}</code></pre>
+        
+        <p>
+          Alternatively, one could do it like this:
+        </p>
+        
+        <pre><code class="language-java">public class FormPage {
+    SelenideElement btnSave = $(".btn-primary").as("the &lt;Save&gt; button of the &lt;User settings widget&gt;");
+}</code></pre>
+        
+        <p>
+          In the report, it would look better, but firstly, not so much, and secondly, if this button is located in every record of a long list of users, where each row is a complex widget with many different elements, including a button, we will get an ElementsCollection, filter it by some stable parameter, find the required ones, and click the button in each record. All actions in the report will look identical.
+        </p>
+        
+        <h5>Problems with Element Collections</h5>
+        <p>
+          In the end, we come back to a major drawback of the BDD approach — we end up creating tons of wrapper methods for every trivial click, and in web applications, there can be hundreds of such clicks. And that's only for clicks! Add other actions, context menus, operations with various input fields, events, verifications ranging from simple text to HTML attributes, etc., and multiply by the number of elements in the application. Every little action requires a specific description, and if you follow the BDD approach, the test project can end up being much larger than the application under test, which has been confirmed repeatedly in practice.
+        </p>
+        
+        <h5>Operations with Element Collections</h5>
+        <p>
+          Even more problematic, both with BDD frameworks and without them, are operations with element collections. Various searches, filters, and verifications require specific step descriptions that multiply at a frightening rate.
+        </p>
+        
+        <p>
+          For example, a user data table may have 30 or more parameters:
+        </p>
+        
+        <pre><code class="language-java">public class FormPage {
+    ElementsCollection btnSave = $$(".user-record").as("Users settings list");
+}</code></pre>
+        
+        <p>
+          What if we need to verify each of the 30 parameters individually and create a separate method with a description for each? That is:
+        </p>
+        
+        <pre><code class="language-java">public class FormPage {
+    ElementsCollection users = $$(".user-record").as("Users settings list");
+
+    public void assertEmail(String userId, String expectedEmail) {
+        String targetEmail = users.filter(Condition.text(userId)).first().$x("div[@id='#email-container']").text();
+        Assertions.assertThat(targetEmail).as("User email").isEqualTo(expectedEmail);
+    }
+}</code></pre>
+        
+        <p>
+          And do that for the remaining 29 parameters? Of course not. Here, one should create a DataObject with user parameters and write a universal method that takes this object and iterates through each field, comparing all parameters using Soft Assert. Yes, this is a solid solution, but you would still have to write logic, and the beautiful auto-logged report would be a thing of the past.
+        </p>
+        
+        <h5>Drawbacks of Selenide Allure Report Auto-Logging</h5>
+        <p>
+          The fact that Selenide Allure reports were generated automatically did not satisfy me. After some time, to recall a scenario and understand what happened, even I had to struggle, not to mention someone who is not familiar with the code. Moreover, in some cases, reports had to be produced in languages other than English.
+        </p>
+        
+        <p>
+          There is no perfect tool, but I was contemplating and trying to find a solution that would eliminate most of the complexities of any approach. I wanted to make it so that all I had to do was define the entities of pages, widgets, and elements, and write the scenario, while the framework would handle everything else. This way, I would hardly have to write step logic, as it would be organized automatically based on the code structure and data types, without restricting the free style of Selenide. Moreover, the framework should automatically collect and log all invoked actions, making them as close as possible to beautiful BDD reports, while providing the ability to edit this process as desired.
+        </p>
+        
+        <h5>My Thoughts</h5>
+        <ol>
+          <li>Adopt a standard and clear structure, but add more specifics.</li>
+          <li>Every entity should have expected properties and behaviors, most of which are implemented out of the box.</li>
+          <li>Every entity, whether it is a page, widget, or element, should know where it is located and what it belongs to.</li>
+          <li>All entities should be easily extendable; there should be an opportunity to add any custom elements, components, and modifications.</li>
+          <li>The framework should collect metadata of objects on its own in 99% of cases.</li>
+          <li>The framework should rely on Allure and Selenide without limiting their capabilities.</li>
+          <li>I must finally eliminate element searches through filtering, and generally searching in lists, and put it behind me like a nightmare.</li>
+          <li>Code should be repeated minimally (DRY). Even page objects should be easily extendable and reusable.</li>
+          <li>The framework should include a multitude of pre-implemented user actions with the browser, which are logged in the reports.</li>
+          <li>I should be able to edit the logged steps and define their level of detail dynamically.</li>
+          <li>And finally, beautiful reports should be generated in multiple languages, not just English.</li>
+        </ol>
+        
+        <h5>PageObject Structure</h5>
+        <p>
+          Starting with point 1, I wanted to see a structure roughly like this. I annotate the class to indicate that it is a page. The elements and widgets of the page should be represented by their corresponding types.
+        </p>
+        
+        <h4>PageObject with Simple Elements</h4>
+        <pre><code class="language-java">@PageObject
+public class FormPage {
+
+    @Name("Login")
+    @Locator(css = "#login")
+    protected TextField fieldLogin;
+
+    @Name("Email")
+    @Locator(css = "#email")
+    protected TextField fieldEmail;
+
+    @Name("Password")
+    @Locator(css = "#password")
+    protected TextField fieldPassword;
+
+    // ... other fields
+}
+        </code></pre>
+        
+        <h4>PageObject with Widgets</h4>
+        <pre><code class="language-java">@PageObject
+public class HomePage {
+
+    @Name("Navigation bar")
+    NavBar navBar;
+
+    @Name("Search block")
+    SearchBlock searchBlock;
+
+    @Name("Gallery block")
+    GalleryBlock galleryBlock;
+
+    @Name("Footer")
+    Footer footer;
+}
+        </code></pre>
+        
+        <h4>Description of Widgets</h4>
+        <pre><code class="language-java">@Widget
+public static class NavBar extends AbstractWidget {
+
+    @Name("Images")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(1)")
+    protected Link linkPhotos;
+
+    @Name("Stickers")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(2)")
+    protected Link linkStickers;
+
+    @Name("Icons")
+    @Locator(css = ".navbar-nav .nav-item:nth-child(3)")
+    protected Link linkIcons;
+}
+        </code></pre>
+        
+        <p>
+          Where:
+        </p>
+        <ul>
+          <li><code>@PageObject</code> — indicates that the class is a page;</li>
+          <li><code>@Widget</code> — indicates that the class is a widget (a part of the page);</li>
+          <li><code>@Name</code> — assigns a specific name to an element or widget;</li>
+          <li><code>@Locator</code> — one of the ways to specify the path to an object on an HTML page.</li>
+        </ul>
+        
+        <p>
+          The test scenario, as it should be, should not contain logic but rather represent a sequential invocation of methods of widgets and elements.
+        </p>
+        
+        <p>
+          I sketched the following diagram and started working on its implementation.
+        </p>
+        
+        <iframe src="./../shared/framework-scheme.html"></iframe>
+        
+        <p>
+          I decided not to show off and simply combined the names of the underlying technologies – it turned out as "Allurium". Next, examples illustrating the essence and structure of the framework will be discussed.
+        </p>
+      </div>
+    
+      <div class="nav-links text-center mt-5">
+        <a href="./../eng/quick_start.html" class="btn btn-outline-secondary">
+          <b>Quick Start</b> &nbsp;&raquo;
+        </a>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2025 Allurium - distributed under the MIT license</p>
+    </footer>
+    
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" crossorigin="anonymous"></script>
+</body>
+</html>

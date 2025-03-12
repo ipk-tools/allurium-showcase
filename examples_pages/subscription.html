@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allurium - Быстрый старт</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .container {
+        background-color: #EEE;
+        padding: 10px;
+        border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Main Content Section -->
+  <section id="form-example" class="">
+    <div class="container">
+        (this is iframe)
+      <h5 class="section-title">Subscription Form</h5>
+      <form id="subscriptionForm" action="/success" method="post" class="mt-4">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <!-- The input field with id "email" will be used in the Page Object -->
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+        <!-- The button below will be found by XPath //button -->
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-pzjw8f+ua7Kw1TIq0LkBbf2jOq/dKbX4iXkLppInR8p9lE5f/vp6LFh8S3y9r96f" 
+          crossorigin="anonymous"></script>
+</body>
+</html>

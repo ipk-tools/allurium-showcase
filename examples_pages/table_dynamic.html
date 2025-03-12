@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion Example</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Menu on the left -->
+        <div class="col-md-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+            </div>
+        </div>
+
+        <!-- Table on the right -->
+        <div class="col-md-8">
+            <div class="container mt-5">
+                <button class="btn btn-success mb-3" id="addEmployeeButton">Add Random Employee</button>
+                <button class="btn btn-danger mb-3" id="removeAllButton">Remove All Records</button>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Salary</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                    <tr>
+                        <td>John</td>
+                        <td>Smith</td>
+                        <td>28</td>
+                        <td>john.smith@example.com</td>
+                        <td>7500</td>
+                        <td>Marketing</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Jane</td>
+                        <td>Doe</td>
+                        <td>32</td>
+                        <td>jane.doe@example.com</td>
+                        <td>8500</td>
+                        <td>Development</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Alice</td>
+                        <td>Johnson</td>
+                        <td>25</td>
+                        <td>alice.johnson@example.com</td>
+                        <td>6000</td>
+                        <td>Human Resources</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Brandon</td>
+                        <td>Hover</td>
+                        <td>25</td>
+                        <td>brandon.hover@example.com</td>
+                        <td>8600</td>
+                        <td>Development</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    const departments = ['Insurance', 'Compliance', 'Legal', 'Marketing', 'Development', 'Operations', 'Administration', 'Human Resources'];
+
+    // Function to generate random employee data
+    function getRandomEmployee() {
+        const firstNames = ['John', 'Jane', 'Alice', 'Bob', 'Eve', 'Dexter', 'Lana', 'Marco', 'Arielle', 'Kierra'];
+        const lastNames = ['Smith', 'Johnson', 'Brown', 'Davis', 'Martinez', 'Garcia', 'Rodriguez', 'Wright', 'Walker', 'Adams'];
+        const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        const randomAge = Math.floor(Math.random() * 30) + 20;
+        const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@example.com`;
+        const randomSalary = Math.floor(Math.random() * 10000) + 5000;
+        const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
+
+        return {
+            firstName: randomFirstName,
+            lastName: randomLastName,
+            age: randomAge,
+            email: randomEmail,
+            salary: randomSalary,
+            department: randomDepartment
+        };
+    }
+
+    // Add event listener to the "Add" button
+    document.getElementById('addEmployeeButton').addEventListener('click', () => {
+        const employee = getRandomEmployee();
+        const tableBody = document.getElementById('employeeTableBody');
+
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${employee.firstName}</td>
+            <td>${employee.lastName}</td>
+            <td>${employee.age}</td>
+            <td>${employee.email}</td>
+            <td>${employee.salary}</td>
+            <td>${employee.department}</td>
+            <td>
+                <button class="btn btn-danger btn-sm deleteButton">Delete</button>
+            </td>
+        `;
+
+        tableBody.appendChild(newRow);
+
+        // Attach delete functionality to the new button
+        newRow.querySelector('.deleteButton').addEventListener('click', () => {
+            newRow.remove();
+        });
+    });
+
+    // Add delete functionality to existing delete buttons
+    document.querySelectorAll('.deleteButton').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.target.closest('tr').remove();
+        });
+    });
+
+    document.getElementById('removeAllButton').addEventListener('click', () => {
+        const tableBody = document.getElementById('employeeTableBody');
+        tableBody.innerHTML = ''; // Clear all rows from the table body
+    });
+</script>
+</body>
+</html>
