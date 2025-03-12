@@ -19,7 +19,7 @@ configurations {
 compileJava.options.encoding = 'utf-8'
 
 group = "io.github.ipk-tools"
-version = "6.17.2"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -53,7 +53,6 @@ dependencies {
     implementation('org.assertj:assertj-core:3.19.0')
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     implementation('org.slf4j:slf4j-simple:1.7.30')
-    implementation('com.github.javafaker:javafaker:1.0.2')
     implementation("javax.persistence:javax.persistence-api:2.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.6")
     implementation('com.google.code.gson:gson:2.10.1')

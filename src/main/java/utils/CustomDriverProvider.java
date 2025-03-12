@@ -143,9 +143,14 @@ public class CustomDriverProvider implements WebDriverProvider {
      */
     private ChromeOptions getChromeDriverOptions(Capabilities capabilities) {
         log.info("---------------Chrome Driver---------------------");
-        ChromeOptions chromeOptions = !options[0].equals("") ? new ChromeOptions().addArguments(options) : new ChromeOptions();
+        ChromeOptions chromeOptions = !options[0].equals("")
+                ? new ChromeOptions().addArguments(options)
+                : new ChromeOptions();
+        //chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage", "--disable-notifications");
         chromeOptions.setCapability(CapabilityType.BROWSER_VERSION, loadSystemPropertyOrDefault(CapabilityType.BROWSER_VERSION, VERSION_LATEST));
-        chromeOptions.setHeadless(getHeadless());
+        if (getHeadless()) {
+            chromeOptions.addArguments("--headless");
+        }
         chromeOptions.addArguments("--disable-notifications");
         return chromeOptions.merge(capabilities);
     }

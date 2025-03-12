@@ -12,6 +12,7 @@ import utils.CustomDriverProvider;
 public class TestBaseAllurium {
 
     protected HomePage homePage = new HomePage();
+    protected SubscriptionPage subscriptionPage = new SubscriptionPage();
     protected PracticeFormPage practiceFormPage = new PracticeFormPage();
     protected FormPage formPage = new FormPage();
     protected AccordionPage accordionPage = new AccordionPage();
@@ -36,7 +37,7 @@ public class TestBaseAllurium {
             System.setProperty("remoteUrl", "http://192.168.19.109:8080/wd/hub");
             System.setProperty("width", "1920");
             System.setProperty("height", "1080");
-            System.setProperty("headless", "false");
+            System.setProperty("headless", "true");
             System.setProperty("selenoid", "true");
             Configuration.browser = CustomDriverProvider.class.getName();
         } else {

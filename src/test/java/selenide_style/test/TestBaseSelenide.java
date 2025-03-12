@@ -34,7 +34,7 @@ public class TestBaseSelenide {
 
         Configuration.pageLoadTimeout = 30000;
         Configuration.timeout = 15000;
-        boolean remote = false;
+        boolean remote = true;
 
         if (remote) {
             System.setProperty("browserName", "chrome");

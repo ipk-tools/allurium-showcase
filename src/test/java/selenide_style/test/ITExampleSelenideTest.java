@@ -20,17 +20,20 @@ import static com.codeborne.selenide.Selenide.$;
 public class ITExampleSelenideTest extends TestBaseSelenide {
 
     // local pages url
-    String formPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/form.html";
-    String listsPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/lists.html";
-    String accordionPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/accordion.html";
+//    String formPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/form.html";
+//    String listsPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/lists.html";
+//    String accordionPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/accordion.html";
 //    String listsPageUrl = System.getProperty("user.dir")+"/src/test/resources/html/list_locator_chain.html";
-    String tablePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/table.html";
-    String iframePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/iframe.html";
+//    String tablePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/table.html";
+//    String iframePageUrl = System.getProperty("user.dir")+"/src/test/resources/html/iframe.html";
 
     // remote pages url
-//    String formPageUrl = "file:///home/selenium/Downloads/pages/form.html";
-//    String listsPageUrl = "file:///home/selenium/Downloads/pages/lists.html";
-//    String tablePageUrl = "file:///home/selenium/Downloads/pages/table.html";
+    String formPageUrl = "file:///home/selenium/Downloads/pages/form.html";
+    String listsPageUrl = "file:///home/selenium/Downloads/pages/lists.html";
+    String accordionPageUrl = "file:///home/selenium/Downloads/pages/accordion.html";
+    String listLocatorPageUrl = "file:///home/selenium/Downloads/pages/list_locator_chain.html";
+    String tablePageUrl = "file:///home/selenium/Downloads/pages/table.html";
+    String iframePageUrl = "file:///home/selenium/Downloads/pages/iframe.html";
 
     @Test
     @Feature("Multilevel top menu")
