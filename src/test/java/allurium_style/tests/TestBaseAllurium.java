@@ -23,6 +23,7 @@ public class TestBaseAllurium {
     protected IframePage iframePage = new IframePage();
     protected CarouselPage carouselPage = new CarouselPage();
     protected SwitcherPage switcherPage = new SwitcherPage();
+    protected TabsPage tabsPage = new TabsPage();
 
 
     @BeforeAll

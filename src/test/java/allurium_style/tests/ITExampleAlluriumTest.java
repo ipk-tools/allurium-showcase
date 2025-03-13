@@ -32,6 +32,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
     String iframePageUrl = "file:///"+System.getProperty("user.dir")+"/src/test/resources/html/iframe.html";
     String carouselPageUrl = "file:///"+System.getProperty("user.dir")+"/src/test/resources/html/carousel.html";
     String switcherPageUrl = "file:///"+System.getProperty("user.dir")+"/src/test/resources/html/switcherPage.html";
+    String tabsPageUrl = "file:///"+System.getProperty("user.dir")+"/src/test/resources/html/tabs.html";
 
     // remote pages url
 //    String homePageUrl = "file:///home/selenium/Downloads/pages/integration_test_template.html";
@@ -455,6 +456,27 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         homePage.footer().aboutUs().scrollTo();
         homePage.footer().aboutUs().scrollTo(false);
         homePage.footer().aboutUs().scrollTo("My CUSTOM scroll to step!");
+    }
+
+    @Test
+    @DisplayName("Tabs widget example")
+    public void tabsWidgetExample() {
+        UiSteps.openBrowser(tabsPageUrl);
+        tabsPage.tabs().select("Contact");
+        tabsPage.tabs().select("Profile");
+        tabsPage.tabs().select("Home");
+        tabsPage.tabs().select("Contact");
+        tabsPage.tabs().select("Profile");
+        tabsPage.tabs().select("Home");
+        tabsPage.tabs().select("Contact");
+        tabsPage.tabs().select("Profile");
+        tabsPage.tabs().select("Home");
+        tabsPage.tabs().select("Contact");
+        tabsPage.tabs().select("Profile");
+        tabsPage.tabs().select("Home");
+        tabsPage.tabs().select("Contact");
+        tabsPage.tabs().select("Profile");
+        tabsPage.tabs().select("Home");
     }
 
 }
