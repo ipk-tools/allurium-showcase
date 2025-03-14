@@ -19,7 +19,7 @@ configurations {
 compileJava.options.encoding = 'utf-8'
 
 group = "io.github.ipk-tools"
-version = "1.1.0"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
@@ -71,7 +71,7 @@ dependencies {
     }
     testImplementation("io.qameta.allure:allure-junit5:2.24.0")
 
-    implementation("io.github.ipk-tools:allurium:1.1.1")
+    implementation("io.github.ipk-tools:allurium:1.2.0")
 }
 
 reporting {

@@ -28,8 +28,6 @@ public class TestBaseAllurium {
 
     @BeforeAll
     protected static void beforeAll() {
-        Configuration.pageLoadTimeout = 30000;
-        Configuration.timeout = 15000;
         boolean remote = false;
 
         if (remote) {
@@ -38,12 +36,13 @@ public class TestBaseAllurium {
             System.setProperty("remoteUrl", "http://192.168.19.109:8080/wd/hub");
             System.setProperty("width", "1920");
             System.setProperty("height", "1080");
-            System.setProperty("headless", "true");
+            System.setProperty("headless", "false");
             System.setProperty("selenoid", "true");
             Configuration.browser = CustomDriverProvider.class.getName();
         } else {
             Configuration.browser = "chrome";
             WebDriverManager.chromedriver().setup();
+            Configuration.browserSize = "1920x1080";
         }
         Selenide.open();
         WebDriverRunner.getWebDriver().manage().window().maximize();

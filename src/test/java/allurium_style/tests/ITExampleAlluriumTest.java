@@ -46,6 +46,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
 //    String iframePageUrl = "file:///home/selenium/Downloads/pages/iframe.html";
 //    String carouselPageUrl = "file:///home/selenium/Downloads/pages/carousel.html";
 //    String switcherPageUrl = "file:///home/selenium/Downloads/pages/switcherPage.html";
+//    String tabsPageUrl = "file:///home/selenium/Downloads/pages/tabs.html";
 
     @Test
     @Feature("Quick Start")
@@ -86,7 +87,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         formPage.fieldRank().write("10");
         formPage.fieldDate().clearAndWrite("11.11.2011");
         formPage.fieldTelephone().write("199887688");
-        formPage.btnAnnualIncomeIncrement().clickAndHold(5000);
+//        formPage.btnAnnualIncomeIncrement().clickAndHold(5000);
         formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()));
         formPage.radioBtnMale().click();
         formPage.radioBtnMale().assertEnabled();
