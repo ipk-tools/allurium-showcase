@@ -129,7 +129,7 @@ public class CustomDriverProvider implements WebDriverProvider {
                 "test-type", "no-default-browser-check", "ignore-certificate-errors");
 
         Map<String, String> mobileEmulation = new HashMap<>();
-        chromeOptions.setHeadless(getHeadless());
+//        chromeOptions.setHeadless(getHeadless());
         mobileEmulation.put("deviceName", mobileDeviceName);
         chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
         return chromeOptions.merge(capabilities);
@@ -155,55 +155,15 @@ public class CustomDriverProvider implements WebDriverProvider {
         return chromeOptions.merge(capabilities);
     }
 
-    /**
-     * Задает options для запуска Firefox драйвера
-     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-     *
-     * @return FirefoxOptions
-     */
     private FirefoxOptions getFirefoxDriverOptions(Capabilities capabilities) {
         log.info("---------------Firefox Driver---------------------");
         FirefoxOptions firefoxOptions = !options[0].equals("") ? new FirefoxOptions().addArguments(options) : new FirefoxOptions();
         firefoxOptions.setCapability(CapabilityType.BROWSER_VERSION, loadSystemPropertyOrDefault(CapabilityType.BROWSER_VERSION, VERSION_LATEST));
-        firefoxOptions.setHeadless(getHeadless());
+//        firefoxOptions.setHeadless(getHeadless());
         return firefoxOptions.merge(capabilities);
     }
 
-//    /**
-//     * Задает options для запуска Opera драйвера
-//     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-//     *
-//     * @return operaOptions
-//     */
-//    private OperaOptions getOperaDriverOptions(Capabilities capabilities) {
-//        log.info("---------------Opera Driver---------------------");
-//        OperaOptions operaOptions = !options[0].equals("") ? new OperaOptions().addArguments(options) : new OperaOptions();
-//        operaOptions.setCapability(CapabilityType.BROWSER_VERSION, loadSystemPropertyOrDefault(CapabilityType.BROWSER_VERSION, VERSION_LATEST));
-//        return operaOptions.merge(capabilities);
-//    }
 
-//    /**
-//     * Задает options для запуска Opera драйвера в контейнере Selenoid
-//     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-//     *
-//     * @return operaOptions
-//     */
-//    private OperaOptions getOperaRemoteDriverOptions(Capabilities capabilities) {
-//        log.info("---------------Opera Driver---------------------");
-//        OperaOptions operaOptions = !this.options[0].equals("") ? (new OperaOptions()).addArguments(this.options) : new OperaOptions();
-//        operaOptions.setCapability(CapabilityType.BROWSER_VERSION, loadSystemPropertyOrDefault("browserVersion", "latest"));
-//        operaOptions.setCapability(CapabilityType.BROWSER_NAME, Browsers.OPERA);
-//        operaOptions.setBinary(loadSystemPropertyOrDefault("webdriver.opera.driver", "/usr/bin/opera"));
-//        return operaOptions.merge(capabilities);
-//    }
-
-
-    /**
-     * Задает options для запуска IE драйвера
-     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-     *
-     * @return internetExplorerOptions
-     */
     private InternetExplorerOptions getIEDriverOptions(Capabilities capabilities) {
         log.info("---------------IE Driver---------------------");
         InternetExplorerOptions internetExplorerOptions = !options[0].equals("") ? new InternetExplorerOptions().addCommandSwitches(options) : new InternetExplorerOptions();
@@ -216,12 +176,6 @@ public class CustomDriverProvider implements WebDriverProvider {
         return internetExplorerOptions;
     }
 
-    /**
-     * Задает options для запуска Edge драйвера
-     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-     *
-     * @return edgeOptions
-     */
     private EdgeOptions getEdgeDriverOptions(Capabilities capabilities) {
         log.info("---------------Edge Driver---------------------");
         EdgeOptions edgeOptions = new EdgeOptions();
@@ -229,12 +183,6 @@ public class CustomDriverProvider implements WebDriverProvider {
         return edgeOptions.merge(capabilities);
     }
 
-    /**
-     * Задает options для запуска Safari драйвера
-     * options можно передавать, как системную переменную, например -Doptions=--load-extension=my-custom-extension
-     *
-     * @return SafariOptions
-     */
     private SafariOptions getSafariDriverOptions(Capabilities capabilities) {
         log.info("---------------Safari Driver---------------------");
         SafariOptions safariOptions = new SafariOptions();
@@ -242,68 +190,28 @@ public class CustomDriverProvider implements WebDriverProvider {
         return safariOptions.merge(capabilities);
     }
 
-    /**
-     * Создает экземпляр ChromeDriver с переданными capabilities и window dimensions
-     *
-     * @return WebDriver
-     */
     private WebDriver createChromeDriver(Capabilities capabilities) {
         if (loadSystemPropertyOrDefault(BROWSER, Browsers.CHROME).equals(MOBILE_DRIVER))
             return WebDriverManager.chromedriver().capabilities(getMobileChromeOptions(capabilities)).create();
         return WebDriverManager.chromedriver().capabilities(getChromeDriverOptions(capabilities)).create();
     }
 
-    /**
-     * Создает экземпляр FirefoxDriver с переданными capabilities и window dimensions
-     *
-     * @return WebDriver
-     */
     private WebDriver createFirefoxDriver(Capabilities capabilities) {
         return WebDriverManager.firefoxdriver().capabilities(getFirefoxDriverOptions(capabilities)).create();
     }
 
-//    /**
-//     * Создает экземпляр OperaDriver с переданными capabilities и window dimensions
-//     *
-//     * @return WebDriver
-//     */
-//    private WebDriver createOperaDriver(Capabilities capabilities) {
-//        return WebDriverManager.operadriver().capabilities(getOperaDriverOptions(capabilities)).create();
-//    }
-
-    /**
-     * Создает экземпляр InternetExplorerDriver с переданными capabilities и window dimensions
-     *
-     * @return WebDriver
-     */
     private WebDriver createIEDriver(Capabilities capabilities) {
         return WebDriverManager.iedriver().capabilities(getIEDriverOptions(capabilities)).create();
     }
 
-    /**
-     * Создает экземпляр EdgeDriver с переданными capabilities и window dimensions
-     *
-     * @return WebDriver
-     */
     private WebDriver createEdgeDriver(Capabilities capabilities) {
         return WebDriverManager.edgedriver().capabilities(getEdgeDriverOptions(capabilities)).create();
     }
 
-    /**
-     * Создает экземпляр SafariDriver с переданными capabilities и window dimensions
-     *
-     * @return WebDriver
-     */
     private WebDriver createSafariDriver(Capabilities capabilities) {
         return WebDriverManager.safaridriver().capabilities(getSafariDriverOptions(capabilities)).create();
     }
 
-    /**
-     * Читает значение параметра headless из application.properties
-     * и selenide.headless из системных пропертей
-     *
-     * @return значение параметра headless или false, если он отсутствует
-     */
     private Boolean getHeadless() {
         Boolean isHeadlessApp = loadSystemPropertyOrDefault(HEADLESS, false);
         Boolean isHeadlessSys = Boolean.parseBoolean(System.getProperty("selenide." + HEADLESS, "false"));

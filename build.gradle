@@ -6,9 +6,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(12)
-        vendor = JvmVendorSpec.ADOPTOPENJDK
-        implementation = JvmImplementation.J9
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -19,7 +17,7 @@ configurations {
 compileJava.options.encoding = 'utf-8'
 
 group = "io.github.ipk-tools"
-version = "1.2.0"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -31,9 +29,9 @@ repositories {
 
 ext {
     allureVersion = '2.17.0'
-    aspectjVersion = '1.9.21'
+    aspectjVersion = '1.9.22.1'
     lombokVersion = '1.18.22'
-    selenideVersion = '6.17.2'
+    selenideVersion = '7.6.1'
     junitVersion = '5.9.2'
     testNGVersion = '7.9.0'
     restAssured = '4.4.0'
@@ -42,15 +40,15 @@ ext {
 dependencies {
     implementation("org.testng:testng:${testNGVersion}")
     implementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    implementation("com.codeborne:selenide:${selenideVersion}")
+//    implementation("com.codeborne:selenide:${selenideVersion}")
     implementation("io.qameta.allure:allure-testng:${allureVersion}")
-    implementation("io.qameta.allure:allure-selenide:${allureVersion}")
-    implementation("io.qameta.allure:allure-rest-assured:${allureVersion}")
+//    implementation("io.qameta.allure:allure-selenide:${allureVersion}")
+//    implementation("io.qameta.allure:allure-rest-assured:${allureVersion}")
     implementation("io.rest-assured:rest-assured:${restAssured}")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation('com.fasterxml.jackson.core:jackson-core:2.13.0')
     implementation('io.qameta.atlas:atlas-webdriver:1.8.0')
-    implementation('org.assertj:assertj-core:3.19.0')
+//    implementation('org.assertj:assertj-core:3.19.0')
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     implementation('org.slf4j:slf4j-simple:1.7.30')
     implementation("javax.persistence:javax.persistence-api:2.2")
@@ -66,12 +64,12 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.jsoup:jsoup:1.17.2")
-    implementation('io.github.bonigarcia:webdrivermanager:5.5.3') {
-        exclude group: "com.google.guava", module: "guava"
-    }
+//    implementation('io.github.bonigarcia:webdrivermanager:5.6.4') {
+//        exclude group: "com.google.guava", module: "guava"
+//    }
     testImplementation("io.qameta.allure:allure-junit5:2.24.0")
 
-    implementation("io.github.ipk-tools:allurium:1.2.0")
+    implementation("io.github.ipk-tools:allurium:2.0.0")
 }
 
 reporting {
@@ -80,7 +78,7 @@ reporting {
 
 allure {
     version = "${allureVersion}"
-    aspectjVersion = '1.9.21'
+    aspectjVersion = '1.9.22.1'
 }
 
 test {

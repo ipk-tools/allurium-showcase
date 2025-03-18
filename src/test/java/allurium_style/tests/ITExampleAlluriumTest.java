@@ -87,7 +87,7 @@ public class ITExampleAlluriumTest extends TestBaseAllurium {
         formPage.fieldRank().write("10");
         formPage.fieldDate().clearAndWrite("11.11.2011");
         formPage.fieldTelephone().write("199887688");
-//        formPage.btnAnnualIncomeIncrement().clickAndHold(5000);
+        formPage.btnAnnualIncomeIncrement().clickAndHold(5000);
         formPage.uploadAvatar().uploadFile(new File(imageUrl.getFile()));
         formPage.radioBtnMale().click();
         formPage.radioBtnMale().assertEnabled();

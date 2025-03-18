@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-import jdk.jfr.Name;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
